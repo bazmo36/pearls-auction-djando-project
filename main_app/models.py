@@ -13,3 +13,18 @@ class Pearl(models.Model):
 
     def __str__(self):
         return f"{self.name} (owned by {self.owner.username})"
+    
+
+
+class Certification(models.Model):
+    pearl = models.OneToOneField(Pearl, on_delete=models.CASCADE, related_name="certification")
+    certified_by = models.CharField(max_length=100)
+    certificate_number = models.CharField(max_length=50, unique=True)
+    grade = models.CharField(max_length=50)
+    issued_at = models.DateField()
+
+    def __str__(self):
+        return f"Certificate {self.certificate_number} for {self.pearl.name}"
+    
+
+    
