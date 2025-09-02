@@ -44,8 +44,7 @@ class AuctionListing(models.Model):
         days_ahead = 0 - created_date.weekday()  # 0 = Monday
         if days_ahead <= 0:
             days_ahead += 7
-        next_monday = (created_date + timedelta(days=days_ahead)).replace(
-        hour=0, minute=0, second=0)
+        next_monday = (created_date + timedelta(days=days_ahead)).replace(hour=0, minute=0, second=0, microsecond=0)
         return next_monday
 
     def end_time(self):
@@ -55,6 +54,13 @@ class AuctionListing(models.Model):
     def is_open(self):
         now = timezone.now()
         return self.start_time() <= now <= self.end_time()
+
+    
+    def current_price(self):
+        highest_bid = self.bids.order_by("-amount").first()
+        return highest_bid.amount if highest_bid else self.starting_price
+    
+
 
 
     
