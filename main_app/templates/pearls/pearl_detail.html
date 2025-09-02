@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ pearl.name }}</h1>
+    <img src="{{ pearl.image.url }}" alt="{{ pearl.name }}" width="200">
+    <p>{{ pearl.description }}</p>
+    <p>Created at: {{ pearl.created_at }}</p>
+
+    <a href="{% url 'pearl_update' pearl.id %}" class="btn">Edit</a>
+    <form method='post' action="{% url 'pearl_delete' pearl.pk %}">
+        {% csrf_token %}
+        <button>Delete</button>
+    </form>
+ 
+    {% if pearl.certification %}
+        <h2>Certification</h2>
+        <p>Certified by: {{ pearl.certification.certified_by }}</p>
+        <p>Certificate #: {{ pearl.certification.certificate_number }}</p>
+        <p>Grade: {{ pearl.certification.grade }}</p>
+        <p>Issued at: {{ pearl.certification.issued_at }}</p>
+    {% endif %}
+
+{% endblock %}
