@@ -41,7 +41,7 @@ class AuctionListing(models.Model):
 
     def start_time(self):
         created_date = self.created_at
-        days_ahead = 0 - created_date.weekday()  # 0 = Monday
+        days_ahead = 0 - created_date.weekday() 
         if days_ahead <= 0:
             days_ahead += 7
         next_monday = (created_date + timedelta(days=days_ahead)).replace(hour=0, minute=0, second=0, microsecond=0)
@@ -60,7 +60,6 @@ class AuctionListing(models.Model):
         highest_bid = self.bids.order_by("-amount").first()
         return highest_bid.amount if highest_bid else self.starting_price
     
-
 
 
     
