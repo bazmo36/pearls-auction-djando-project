@@ -28,8 +28,15 @@ class ProfileView(LoginRequiredMixin, ListView):
     template_name = "profile.html"
     context_object_name = "pearls"
 
+    
     def get_queryset(self):
         return Pearl.objects.filter(owner=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    
+
 
 
 
@@ -40,15 +47,11 @@ class PearlListView(LoginRequiredMixin, ListView):
     template_name = "pearls/pearl_list.html"
     context_object_name = "pearls"
 
+    def pearl_list(request):
+        pearls = Pearl.objects.all()  # fetch all pearls from all users
+        return render(request, 'pearl_list.html', {'pearls': pearls})
 
-    def get_queryset(self):
-        return Pearl.objects.filter(owner=self.request.user)
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        print(self.request.user.id)
-        print(self.object_list[0].owner.id)
-        return context
-    
+
 
 
 class PearlDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
@@ -67,6 +70,10 @@ class PearlCreateView(LoginRequiredMixin, CreateView):
     form_class = PearlForm
     template_name = "pearls/pearl_form.html"
     success_url = reverse_lazy('pearl_list')
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user  # set owner
+        return super().form_valid(form)
 
 
 class PearlUpdateView(LoginRequiredMixin,UserPassesTestMixin, UpdateView):

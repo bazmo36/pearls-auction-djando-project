@@ -6,9 +6,9 @@ urlpatterns = [
 
     path("auth/signup/",SignUpView.as_view(), name="signup"),
 
-    path("accouts/profile/", ProfileView.as_view(), name="profile"),
+    path("profile/", ProfileView.as_view(), name="profile"),
 
-     path("pearls/", PearlListView.as_view(), name="pearl_list"),
+    path("pearls/", PearlListView.as_view(), name="pearl_list"),
     path("pearls/<int:pk>/", PearlDetailView.as_view(), name="pearl_detail"),
     path("pearls/create/", PearlCreateView.as_view(), name="pearl_create"),
     path("pearls/<int:pk>/update/", PearlUpdateView.as_view(), name="pearl_update"),

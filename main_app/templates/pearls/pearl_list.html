@@ -1,19 +1,22 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h1>My Pearls</h1>
-<a href="{% url 'pearl_create' %}" class="btn">Add New Pearl</a>
+<h1>All Pearls</h1>
+
+<a href="{% url 'pearl_create' %}">Add New Pearl</a>
 
 {% if pearls %}
     <ul>
-    {% for pearl in pearls %}
+        {% for pearl in pearls %}
         <li>
-            <a href="{% url 'pearl_detail' pearl.id %}">{{ pearl.name }}</a>
+            <a href="{% url 'pearl_detail' pearl.id %}">{{ pearl.name }}</a> by {{ pearl.user.username }}
+            <br>
             <img src="{{ pearl.image.url }}" alt="{{ pearl.name }}" width="100">
         </li>
-    {% endfor %}
+        {% endfor %}
     </ul>
 {% else %}
-    <p>You have not added any pearls yet.</p>
+    <p>No pearls have been added yet.</p>
 {% endif %}
-{% endblock %}
 
+{% endblock %}
