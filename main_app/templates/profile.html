@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ user.username }}'s Profile</h1>
+
+  {% if pearls %}
+    <div>
+      {% for pearl in pearls %}
+        <div>
+          <a href="{% url 'pearl_detail' pearl.pk %}">
+            {% if pearl.image %}
+              <img src="{{ pearl.image.url }}" alt="{{ pearl.name }}">
+            {% else %}
+              <div>
+                No Image
+              </div>
+            {% endif %}
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>You have not added any pearls yet.</p>
+    <a href="{% url 'pearl_create' %}">Add your first pearl</a>
+  {% endif %}
+{% endblock %}

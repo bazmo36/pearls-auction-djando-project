@@ -4,6 +4,6 @@ from .models import Pearl
 class PearlForm(forms.ModelForm):
     class Meta:
         model = Pearl
-        fields = ["owner", "name", "description", "image", "created_at"]
+        fields = ["owner", "name", "description", "image"]
 
 

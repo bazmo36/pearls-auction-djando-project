@@ -10,6 +10,12 @@ from .forms import PearlForm
 
 # Create your views here.
 
+class HomePageView(ListView):
+    model = Pearl
+    template_name = "home.html"
+    context_object_name = "pearls"
+    ordering = ["-created_at"]
+
 class SignUpView(CreateView):
     model = User
     form_class = UserCreationForm
@@ -17,14 +23,32 @@ class SignUpView(CreateView):
     template_name = 'registration/signup.html'
 
 
+class ProfileView(LoginRequiredMixin, ListView):
+    model = Pearl
+    template_name = "profile.html"
+    context_object_name = "pearls"
+
+    def get_queryset(self):
+        return Pearl.objects.filter(owner=self.request.user)
+
+
+
 # Pearl CBV
 
 class PearlListView(LoginRequiredMixin, ListView):
     model = Pearl
     template_name = "pearls/pearl_list.html"
+    context_object_name = "pearls"
+
 
     def get_queryset(self):
         return Pearl.objects.filter(owner=self.request.user)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(self.request.user.id)
+        print(self.object_list[0].owner.id)
+        return context
+    
 
 
 class PearlDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
@@ -33,18 +57,38 @@ class PearlDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     def test_func(self):
         pearl = self.get_object()
-        return pearl.owner == self.request.user
+        return self.request.user == pearl.owner
+
+
     
 
 class PearlCreateView(LoginRequiredMixin, CreateView):
     model = Pearl
     form_class = PearlForm
     template_name = "pearls/pearl_form.html"
+    success_url = reverse_lazy('pearl_list')
 
 
-class PearlUpdateView(LoginRequiredMixin, UpdateView):
+class PearlUpdateView(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
     model = Pearl
     form_class = PearlForm
     template_name = "pearls/pearl_form.html"
+    success_url = reverse_lazy('pearl_list')
+
     
+    def test_func(self):
+        pearl = self.get_object()
+        return self.request.user == pearl.owner
+
+
+    
+class PearlDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
+    model = Pearl
+    success_url = reverse_lazy('pearl_list')
+
+    def test_func(self):
+        pearl = self.get_object()
+        return self.request.user == pearl.owner
+
+
 
