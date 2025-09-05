@@ -54,13 +54,11 @@ class PearlListView(LoginRequiredMixin, ListView):
 
 
 
-class PearlDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+class PearlDetailView(LoginRequiredMixin, DetailView):
     model = Pearl
     template_name = "pearls/pearl_detail.html"
+    
 
-    def test_func(self):
-        pearl = self.get_object()
-        return self.request.user == pearl.owner
 
 
     
@@ -72,7 +70,7 @@ class PearlCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('pearl_list')
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user  # set owner
+        form.instance.owner = self.request.user
         return super().form_valid(form)
 
 

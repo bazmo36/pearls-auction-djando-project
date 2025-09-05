@@ -6,11 +6,13 @@
     <p>{{ pearl.description }}</p>
     <p>Created at: {{ pearl.created_at }}</p>
 
+    {%if request.user == pearl.owner %}
     <a href="{% url 'pearl_update' pearl.id %}" class="btn">Edit</a>
     <form method='post' action="{% url 'pearl_delete' pearl.pk %}">
         {% csrf_token %}
         <button>Delete</button>
     </form>
+    {%endif%}
  
     {% if pearl.certification %}
         <h2>Certification</h2>
