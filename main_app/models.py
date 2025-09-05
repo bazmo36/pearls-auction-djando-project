@@ -21,15 +21,24 @@ class Pearl(models.Model):
 
 
 class Certification(models.Model):
-    pearl = models.OneToOneField(Pearl, on_delete=models.CASCADE, related_name="certification")
-    certified_by = models.CharField(max_length=100)
+
+    GRADE_CHOICES = [
+        ('A', 'A - Excellent Quality'),
+        ('AA', 'AA - Very High Quality'),
+        ('AAA', 'AAA - Highest Quality'),
+        ('B', 'B - Good'),
+        ('C', 'C - Commercial Grade'),
+    ]
+     
+    pearl = models.OneToOneField('Pearl', on_delete=models.CASCADE, related_name="certification")
+    certified_by = models.CharField(max_length=100, help_text="Name of the certification authority")
     certificate_number = models.CharField(max_length=50, unique=True)
-    grade = models.CharField(max_length=50)
-    issued_at = models.DateField()
+    grade = models.CharField(max_length=3, choices=GRADE_CHOICES, help_text="Standardized pearl grading system.")
+    issued_at = models.DateField
+    certificate_image = models.ImageField(upload_to='certificates/', blank=True, null=True)
 
     def __str__(self):
         return f"Certificate {self.certificate_number} for {self.pearl.name}"
-    
 
 
 
