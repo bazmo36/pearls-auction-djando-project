@@ -9,9 +9,10 @@
     <ul>
         {% for pearl in pearls %}
         <li>
-            <a href="{% url 'pearl_detail' pearl.id %}">{{ pearl.name }}</a> by {{ pearl.user.username }}
-            <br>
-            <img src="{{pearl.image.url}}" alt="{{ pearl.name }}" width="100">
+            
+            <a href="{% url 'pearl_detail' pearl.pk %}">
+                <img src="{{pearl.image.url}}" alt="{{ pearl.name }}" width="100">
+            </a>
         </li>
         {% endfor %}
     </ul>

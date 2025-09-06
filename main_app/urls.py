@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomePageView, ProfileView, SignUpView, PearlCreateView, PearlListView, PearlDetailView, PearlUpdateView, PearlDeleteView, CertificationCreateView, CertificationDetailView
+from .views import HomePageView, ProfileView, SignUpView, PearlCreateView, PearlListView, PearlDetailView, PearlUpdateView, PearlDeleteView, CertificationCreateView, CertificationDetailView,CertificationUpdateView,CertificationDeleteView
 
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),
@@ -18,5 +18,8 @@ urlpatterns = [
 
     # Certification URL
      path('pearls/<int:pk>/certifications/add/', CertificationCreateView.as_view(), name='certification_create'),
-     path('certifications/<int:pk>/', CertificationDetailView.as_view(), name='certification_detail'),
+     path('certifications/<int:pk>/edit/', CertificationUpdateView.as_view(), name='certification_update'),
+     path('certifications/<int:pk>/', 
+     CertificationDetailView.as_view(), name='certification_detail'),
+      path('certifications/<int:pk>/delete/', CertificationDeleteView.as_view(), name='certification_delete')
 ]

@@ -9,6 +9,14 @@
     <img src="{{ certification.certificate_image.url }}" width="300">
   {% endif %}
 
+   {% if request.user == certification.pearl.owner %}
+    <a href="{% url 'certification_update' certification.pk %}">Edit</a>
+    <form method='post' action="{% url 'certification_delete' certification.pk %}">
+        {% csrf_token %}
+        <button>Delete</button>
+    </form>
+  {% endif %}
+
   <a href="{% url 'pearl_detail' certification.pearl.id %}">← Back to {{ certification.pearl.name }}</a>
-  
+
 {% endblock  %}

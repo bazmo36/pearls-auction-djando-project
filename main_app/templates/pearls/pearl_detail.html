@@ -22,12 +22,10 @@
     <h2>Certifications</h2>
     {% for cert in pearl.certifications.all %}
         <div class="certification">
-            <p>Certified by: {{ cert.certified_by }}</p>
-            <p>Certificate Number: {{ cert.certificate_number }}</p>
-            <p>Grade: {{ cert.grade }}</p>
-            <p>Issued at: {{ cert.issued_at }}</p>
+          <a href="{% url 'certification_detail' cert.pk %}">
+            <img src="{{ cert.certificate_image.url }}" alt="Certificate {{ cert.certificate_number }}" width="200">
+        </a>
         </div>
-        <a href="{% url 'certification_detail' cert.pk %}">View</a>
     {% endfor %}
 {% endif %}
 

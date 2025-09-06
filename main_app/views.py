@@ -130,3 +130,28 @@ class CertificationCreateView(CreateView):
     
     def get_success_url(self):
         return reverse('pearl_detail', kwargs={'pk': self.pearl.pk})
+
+
+class CertificationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Certification
+    form_class = CertificationForm
+    template_name = 'certifications/certification_form.html'
+
+    def get_success_url(self):
+        return reverse('pearl_detail', kwargs={'pk': self.object.pearl.pk})
+
+    def test_func(self):
+        certification = self.get_object()
+        return certification.pearl.owner == self.request.user
+
+
+class CertificationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Certification
+    
+    def get_success_url(self):
+        return reverse_lazy('pearl_detail', kwargs={'pk': self.object.pearl.pk})
+
+    def test_func(self):
+        certification = self.get_object()
+        return certification.pearl.owner == self.request.user
+    
