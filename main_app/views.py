@@ -155,3 +155,4 @@ class CertificationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteVie
         certification = self.get_object()
         return certification.pearl.owner == self.request.user
     
+

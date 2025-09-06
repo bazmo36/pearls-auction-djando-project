@@ -46,32 +46,43 @@ class AuctionListing(models.Model):
     pearl = models.OneToOneField("Pearl", on_delete=models.CASCADE, related_name="auction")
     starting_price = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=False)  
+    is_active = models.BooleanField(default=False)
+
 
     def start_time(self):
         created_date = self.created_at
-        days_ahead = 0 - created_date.weekday() 
+        days_ahead = 0 - created_date.weekday()
         if days_ahead <= 0:
             days_ahead += 7
-        next_monday = (created_date + timedelta(days=days_ahead)).replace(hour=0, minute=0, second=0, microsecond=0)
-        return next_monday
+        return (created_date + timedelta(days=days_ahead)).replace(hour=0, minute=0, second=0, microsecond=0)
 
     def end_time(self):
-        start = self.start_time()
-        return start.replace(hour=23, minute=59, second=59)
+        return self.start_time().replace(hour=23, minute=59, second=59)
 
     def is_open(self):
         now = timezone.now()
         return self.start_time() <= now <= self.end_time()
 
-    
+    def can_modify(self):
+        return timezone.now() < self.start_time()
+
     def current_price(self):
-        highest_bid = self.bids.order_by("-amount").first()
+        highest_bid = self.bids.order_by('-amount').first()
         return highest_bid.amount if highest_bid else self.starting_price
+
+    def status(self):
+        now = timezone.now()
+        if self.is_open():
+            return "Running"
+        elif now < self.start_time():
+            return "Scheduled"
+        else:
+            return "Closed"
+
+    def __str__(self):
+        return f"Auction for {self.pearl.name}"
     
 
-
-    
 
 class Bid(models.Model):
     auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="bids")
