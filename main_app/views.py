@@ -193,3 +193,16 @@ class AuctionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     
     def get_success_url(self):
         return reverse_lazy('pearl_detail', kwargs={'pk': self.object.pearl.pk})
+
+class AuctionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = AuctionListing
+
+    def test_func(self):
+        auction = self.get_object()
+        return self.request.user == auction.pearl.owner and auction.can_modify()
+    
+    def get_success_url(self):
+        return reverse_lazy('pearl_detail', kwargs={'pk': self.object.pearl.pk})
+    
+
+    
