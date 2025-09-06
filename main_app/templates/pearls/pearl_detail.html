@@ -13,13 +13,21 @@
         <button>Delete</button>
     </form>
     {%endif%}
- 
-    {% if pearl.certification %}
-        <h2>Certification</h2>
-        <p>Certified by: {{ pearl.certification.certified_by }}</p>
-        <p>Certificate #: {{ pearl.certification.certificate_number }}</p>
-        <p>Grade: {{ pearl.certification.grade }}</p>
-        <p>Issued at: {{ pearl.certification.issued_at }}</p>
+
+    {% if request.user == pearl.owner %}
+    <a href="{% url 'certification_create' pearl.pk %}" class="btn btn-success">Add Certification</a>
     {% endif %}
+ 
+    {% if pearl.certifications.all %}
+    <h2>Certifications</h2>
+    {% for cert in pearl.certifications.all %}
+        <div class="certification">
+            <p>Certified by: {{ cert.certified_by }}</p>
+            <p>Certificate Number: {{ cert.certificate_number }}</p>
+            <p>Grade: {{ cert.grade }}</p>
+            <p>Issued at: {{ cert.issued_at }}</p>
+        </div>
+    {% endfor %}
+{% endif %}
 
 {% endblock %}

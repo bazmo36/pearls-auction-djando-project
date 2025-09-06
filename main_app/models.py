@@ -30,11 +30,11 @@ class Certification(models.Model):
         ('C', 'C - Commercial Grade'),
     ]
      
-    pearl = models.OneToOneField('Pearl', on_delete=models.CASCADE, related_name="certification")
-    certified_by = models.CharField(max_length=100, help_text="Name of the certification authority")
+    pearl = models.ForeignKey(Pearl, related_name='certifications', on_delete=models.CASCADE)
+    certified_by = models.CharField(max_length=100)
     certificate_number = models.CharField(max_length=50, unique=True)
-    grade = models.CharField(max_length=3, choices=GRADE_CHOICES, help_text="Standardized pearl grading system.")
-    issued_at = models.DateField
+    grade = models.CharField(max_length=3, choices=GRADE_CHOICES)
+    issued_at = models.DateField(null=True, blank=True)
     certificate_image = models.ImageField(upload_to='certificates/', blank=True, null=True)
 
     def __str__(self):
