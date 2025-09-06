@@ -29,4 +29,17 @@
     {% endfor %}
 {% endif %}
 
+{% if not pearl.auction %}
+  <a href="{% url 'auction_create' pearl.pk %}" class="btn btn-success">Add to Auction</a>
+{% elif pearl.auction.can_modify %}
+  <a href="{% url 'auction_update' pearl.auction.pk %}" class="btn btn-warning">Edit Auction</a>
+  {% comment %} <form method="post" action="{% url 'auction_delete' pearl.auction.pk %}" style="display:inline;">
+    {% csrf_token %}
+    <button class="btn btn-danger">Remove from Auction</button>
+  </form> {% endcomment %}
+{% else %}
+  <p>This pearl is in an active auction and cannot be changed.</p>
+{% endif %}
+
+
 {% endblock %}

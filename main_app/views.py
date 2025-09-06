@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
-from .models import Pearl, Certification
+from .models import Pearl, Certification, AuctionListing
 from .forms import PearlForm, CertificationForm
 
 
@@ -156,3 +156,40 @@ class CertificationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteVie
         return certification.pearl.owner == self.request.user
     
 
+class AuctionCreateView(LoginRequiredMixin, CreateView):
+    model = AuctionListing
+    fields = ['starting_price']
+    template_name = 'auction/auction_form.html'
+
+    def dispatch(self, request, *args, **kwargs):
+
+        self.pearl = get_object_or_404(Pearl, pk=kwargs['pk'])
+
+        if hasattr(self.pearl, 'auction'):
+            return self.handle_no_permission
+        
+        if self.pearl.owner != request.user:
+            return self.handle_no_permission
+        
+        return super().dispatch(request, *args, **kwargs) 
+    
+    def form_valid(self, form):
+        form.instance.pearl = self.pearl
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('pearl_detail', kwargs={'pk': self.pearl.pk})
+    
+
+
+class AuctionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = AuctionListing
+    fields = ['starting_price']
+    template_name = 'auction/auction_form.html'
+
+    def test_func(self):
+        auction = self.get_object()
+        return self.request.user == auction.pearl.owner and auction.can_modify()
+    
+    def get_success_url(self):
+        return reverse_lazy('pearl_detail', kwargs={'pk': self.object.pearl.pk})

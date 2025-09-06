@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomePageView, ProfileView, SignUpView, PearlCreateView, PearlListView, PearlDetailView, PearlUpdateView, PearlDeleteView, CertificationCreateView, CertificationDetailView,CertificationUpdateView,CertificationDeleteView
+from .views import HomePageView, ProfileView, SignUpView, PearlCreateView, PearlListView, PearlDetailView, PearlUpdateView, PearlDeleteView, CertificationCreateView, CertificationDetailView,CertificationUpdateView,CertificationDeleteView,AuctionCreateView, AuctionUpdateView
 
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),
@@ -21,5 +21,9 @@ urlpatterns = [
      path('certifications/<int:pk>/edit/', CertificationUpdateView.as_view(), name='certification_update'),
      path('certifications/<int:pk>/', 
      CertificationDetailView.as_view(), name='certification_detail'),
-      path('certifications/<int:pk>/delete/', CertificationDeleteView.as_view(), name='certification_delete')
+      path('certifications/<int:pk>/delete/', CertificationDeleteView.as_view(), name='certification_delete'),
+
+      # Auction URL
+     path('auction/create/<int:pk>/', AuctionCreateView.as_view(), name='auction_create'),
+     path('auction/update/<int:pk>/', AuctionUpdateView.as_view(), name='auction_update'),
 ]
