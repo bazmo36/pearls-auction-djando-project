@@ -98,7 +98,12 @@ class PearlDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
         return self.request.user == pearl.owner
 
 
+# CBV Certification 
 
+class CertificationDetailView(LoginRequiredMixin, DeleteView):
+    model = Certification
+    template_name = 'certifications/certification_detail.html'
+    context_object_name = 'certification'
     
 class CertificationCreateView(CreateView):
     model = Certification

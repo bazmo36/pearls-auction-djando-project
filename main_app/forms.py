@@ -16,3 +16,6 @@ class CertificationForm(forms.ModelForm):
         model = Certification
         fields = ['certified_by', 'certificate_number', 'grade', 'issued_at', 'certificate_image']
        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['certificate_image'].required = True

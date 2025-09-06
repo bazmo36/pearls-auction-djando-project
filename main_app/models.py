@@ -12,7 +12,7 @@ class Pearl(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="pearls")
     name= models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to="pearls/",blank=True, null=True)
+    image = models.ImageField(upload_to="pearls/")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -35,7 +35,7 @@ class Certification(models.Model):
     certificate_number = models.CharField(max_length=50, unique=True)
     grade = models.CharField(max_length=3, choices=GRADE_CHOICES)
     issued_at = models.DateField(null=True, blank=True)
-    certificate_image = models.ImageField(upload_to='certificates/', blank=True, null=True)
+    certificate_image = models.ImageField(upload_to='certificates/')
 
     def __str__(self):
         return f"Certificate {self.certificate_number} for {self.pearl.name}"

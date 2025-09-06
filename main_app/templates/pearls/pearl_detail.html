@@ -27,6 +27,7 @@
             <p>Grade: {{ cert.grade }}</p>
             <p>Issued at: {{ cert.issued_at }}</p>
         </div>
+        <a href="{% url 'certification_detail' cert.pk %}">View</a>
     {% endfor %}
 {% endif %}
 
