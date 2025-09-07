@@ -10,7 +10,7 @@
         {% for auction in active_auctions %}
           <li>
             {{ auction.pearl.name }} - Current Price: {{ auction.current_price }}<br>
-            Ends at: {{ auction.end_time|date:"D M d, Y H:i" }}
+            Ends at: {{ auction.end_time}}
           </li>
         {% endfor %}
       </ul>
@@ -42,3 +42,5 @@
     <p>No auctions available at this time.</p>
   {% endif %}
 {% endblock %}
+
+

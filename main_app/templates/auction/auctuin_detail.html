@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ object.pearl.name }} Auction</h1>
+<p>Current Price: {{ object.current_price }}</p>
+<p>Status: {{ object.status }}</p>
+
+{% if object.is_open %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Place Bid</button>
+  </form>
+{% else %}
+  <p>Auction is not open for bidding right now.</p>
+{% endif %}
+
+<h3>Bid History</h3>
+<a href="#" onclick="document.getElementById('bid-history').style.display='block'">Show Bids</a>
+<ul id="bid-history" style="display:none;">
+  {% for bid in object.bids.all %}
+    <li>{{ bid.user.username }} bid {{ bid.amount }} at {{ bid.created_at }}</li>
+  {% empty %}
+    <li>No bids yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

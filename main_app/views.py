@@ -1,15 +1,15 @@
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseForbidden
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView, FormView
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from .models import Pearl, Certification, AuctionListing
-from .forms import PearlForm, CertificationForm
+from .forms import PearlForm, CertificationForm, BidForm
 from django.utils import timezone
-from datetime import timedelta
+
 
 
 # Create your views here.
@@ -237,3 +237,29 @@ class AuctionListView(TemplateView):
         context['closed_auctions'] = closed_auctions
 
         return context
+    
+class AuctionDetailView(DetailView, FormView):
+    model = AuctionListing
+    template_name = 'auction/auction_detail.html'
+    form_class = BidForm
+
+    def get_success_url(self):
+        return self.request.path
+
+    def form_valid(self, form):
+        auction = self.get_object()
+
+        if not auction.is_open():
+            form.add_error(None, "Auction is not open.")
+            return self.form_invalid(form)
+
+        bid = form.save(commit=False)
+        bid.auction = auction
+        bid.user = self.request.user
+
+        if bid.amount <= auction.current_price():
+            form.add_error('amount', 'Bid must be higher than current price.')
+            return self.form_invalid(form)
+
+        bid.save()
+        return super().form_valid(form)

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Pearl, Certification
+from .models import Pearl, Certification,Bid
 
 class PearlForm(forms.ModelForm):
     class Meta:
@@ -19,3 +19,9 @@ class CertificationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['certificate_image'].required = True
+
+
+class BidForm(forms.ModelForm):
+    class Meta:
+        model = Bid
+        fields = ['amount']
