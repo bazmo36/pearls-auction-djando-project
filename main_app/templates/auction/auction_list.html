@@ -10,7 +10,7 @@
         {% for auction in active_auctions %}
           <li>
             {{ auction.pearl.name }} - Current Price: {{ auction.current_price }}<br>
-            Ends at: {{ auction.end_time}}
+            Time left: <span class="countdown" data-time="{{ auction.end_time|date:'Y-m-d H:i:s' }}"></span>
           </li>
         {% endfor %}
       </ul>
@@ -21,7 +21,8 @@
       <ul>
         {% for auction in upcoming_auctions %}
           <li>
-            {{ auction.pearl.name }} - Starts at: {{ auction.start_time}}
+            {{ auction.pearl.name }}<br>
+            Starts in: <span class="countdown" data-time="{{ auction.start_time|date:'Y-m-d H:i:s' }}"></span>
           </li>
         {% endfor %}
       </ul>
@@ -32,7 +33,7 @@
       <ul>
         {% for auction in closed_auctions %}
           <li>
-            {{ auction.pearl.name }} - Ended on: {{ auction.end_time}}
+            {{ auction.pearl.name }} - Ended on: {{ auction.end_time|date:"D M d, Y H:i" }}
           </li>
         {% endfor %}
       </ul>
@@ -42,5 +43,3 @@
     <p>No auctions available at this time.</p>
   {% endif %}
 {% endblock %}
-
-
