@@ -1,13 +1,15 @@
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseForbidden
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from .models import Pearl, Certification, AuctionListing
 from .forms import PearlForm, CertificationForm
+from django.utils import timezone
+from datetime import timedelta
 
 
 # Create your views here.
@@ -205,4 +207,33 @@ class AuctionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return reverse_lazy('pearl_detail', kwargs={'pk': self.object.pearl.pk})
     
 
-    
+class AuctionListView(TemplateView):
+    template_name = 'auction/auction_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        now = timezone.now()
+
+        all_auctions = AuctionListing.objects.select_related('pearl')
+
+        active_auctions = []
+        upcoming_auctions = []
+        closed_auctions = []
+
+        for auction in all_auctions:
+            start = auction.start_time()
+            end = auction.end_time()
+
+            if start <= now <= end:
+                active_auctions.append(auction)
+            elif now < start:
+                upcoming_auctions.append(auction)
+            else:
+                closed_auctions.append(auction)
+
+        context['active_auctions'] = active_auctions
+        context['upcoming_auctions'] = upcoming_auctions
+        context['closed_auctions'] = closed_auctions
+
+        return context
