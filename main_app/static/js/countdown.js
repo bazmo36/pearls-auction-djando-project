@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   countdownElements.forEach(elem => {
     const timeString = elem.getAttribute('data-time')
 
-    const targetTime = new Date(timeString.replace(' ', 'T')).getTime();
+    const targetTime = new Date(timeString).getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();

@@ -302,4 +302,6 @@ class AuctionDetailView(LoginRequiredMixin, DetailView, FormView):
         context['min_next_bid'] = auction.get_min_next_bid()
         context['bid_history'] = auction.bids.order_by('-amount')[:10] 
         context['now'] = timezone.now() 
+        seconds_left = int((auction.end_time() - timezone.now()).total_seconds())
+        context['duration_seconds'] = seconds_left if seconds_left > 0 else 0
         return context

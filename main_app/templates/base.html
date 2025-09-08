@@ -4,43 +4,57 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Pearl App</title>
+    <title>Pearl Auction</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <nav>
-        {% if user.is_authenticated %}
-            <a href="{% url 'home' %}">Home</a> |
-            <a href="{% url 'profile' pk=user.id %}">Profile</a> |
-            <a href="{% url 'pearl_list' %}">All Pearls</a> |
-            <a href="{% url 'pearl_create' %}">Add Pearl</a> |
-            <a href="{% url 'auction_list' %}">Auctions</a> |
-            <form action="{% url 'logout' %}" method="post">
-                {% csrf_token %}
-                <button type="submit">Logout</button>
-            </form>
-        {% else %}
-            <a href="{% url 'login' %}">Login</a> |
-            <a href="{% url 'signup' %}">Sign Up</a> 
-        {% endif %}
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'home' %}" class="logo"><img src="../static/images/MOZALLO-logo2-edit.png" alt="logo"></a>
+            
+            <div class="nav-links">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'home' %}">Home</a>
+                    <a href="{% url 'profile' pk=user.id %}">Profile</a>
+                    <a href="{% url 'pearl_list' %}">All Pearls</a>
+                    <a href="{% url 'pearl_create' %}">Add Pearl</a>
+                    <a href="{% url 'auction_list' %}">Auctions</a>
+                    <form action="{% url 'logout' %}" method="post" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-logout">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}">Login</a>
+                    <a href="{% url 'signup' %}" class="btn-highlight">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
     </nav>
 
-    <div>
-        {% block content %}
-        {% endblock %}
-    </div>
+    <!-- Main Content -->
+    <main class="main-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; {{ now|date:"Y" }} Pearl Auction. All rights reserved.</p>
+    </footer>
+
+    <!-- JS -->
     <script src="{% static 'js/countdown.js' %}"></script>
     <script src="{% static 'js/circular_countdown.js' %}"></script>
     <script>
     document.addEventListener("DOMContentLoaded", () => {
-        // Pass your auction countdown duration in seconds
-        const countdownDuration = 30;  // or pass dynamically from backend if available
+        const countdownDuration = 30; 
         circularCountdown({
-        containerSelector: "#auction-countdown",
-        duration: countdownDuration,
-        transition: "linear",
-        color: "#c39fe0",
-        size: 250,
-        initialPosition: "up",
+            containerSelector: "#auction-countdown",
+            duration: countdownDuration,
+            transition: "linear",
+            color: "#c39fe0",
+            size: 250,
+            initialPosition: "up",
         });
     });
     </script>

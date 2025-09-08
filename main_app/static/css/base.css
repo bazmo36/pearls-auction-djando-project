@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Bilbo+Swash+Caps&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Bilbo Swash Caps', sans-serif;
+  background: #fdfdfd;
+  color: #333;
+}
+
+main.main-container {
+  padding: 2rem;
+  min-height: 80vh;
+}
+
+
+.navbar {
+  background: linear-gradient(135deg, #c39fe0, #8a6fb5);
+  padding: 0.8rem 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo img {
+  height: 50px;     
+  width: auto;
+  display: block;
+}
+
+
+.logo {
+  max-height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+
+.nav-links a {
+  font-family: 'Bilbo Swash Caps', sans-serif;
+  font-size: 1.5rem;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.nav-links a:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem; 
+}
+
+.btn-highlight {
+  background: #fff;
+  color: #8a6fb5 ;
+  padding: 0.4rem 1rem;
+  border-radius: 1.2rem;
+  font-weight: 600;
+}
+
+.logout-form {
+  display: inline;
+}
+
+.btn-logout {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  font-family: 'Bilbo Swash Caps', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-logout:hover {
+    color:red;
+    opacity: 0.8;
+
+}
+
+
+.footer {
+  background: #f4f1f9;
+  text-align: center;
+  padding: 1rem;
+  color: #555;
+  font-size: 1rem;
+  border-top: 1px solid #e3dff0;
+}

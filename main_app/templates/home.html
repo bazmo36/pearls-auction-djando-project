@@ -1,15 +1,50 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-    <h1>Welcome to Pearl Auction</h1>
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
 
-    {% if user.is_authenticated %}
-        <p>Hello, <strong>{{ user.username }}</strong>!</p>
-        <p>
-            <a href="{% url 'profile' user.pk %}">Profile</a> 
-        </p>
-    {% else %}
-        <a href="{% url 'pearl_list' %}">Explore Pearls</a> 
-    {% endif %}
+
+<section class="hero">
+  <div class="hero-overlay">
+    <h1 class="hero-title">Discover the Beauty of Pearls</h1>
+    <p class="hero-subtitle">Bid, Collect, and Own Timeless Treasures</p>
+    <div class="hero-actions">
+      {% if user.is_authenticated %}
+        <a href="{% url 'profile' user.pk %}" class="btn-primary">My Profile</a>
+        <a href="{% url 'pearl_create' %}" class="btn-secondary">Add Pearl</a>
+      {% else %}
+        <a href="{% url 'signup' %}" class="btn-primary">Get Started</a>
+        <a href="{% url 'pearl_list' %}" class="btn-secondary">Explore Pearls</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Featured Pearls -->
+<section class="featured">
+  <h2 class="section-title"> Featured Pearls</h2>
+  <div class="pearl-grid">
+    {% for pearl in pearls|slice:":6" %}
+      <div class="pearl-card">
+        <img src="{{ pearl.image.url }}" alt="{{ pearl.name }}" class="pearl-img">
+        <div class="pearl-info">
+          <h3>{{ pearl.name }}</h3>
+          <p>{{ pearl.description|truncatewords:12 }}</p>
+          <a href="{% url 'pearl_detail' pearl.pk %}" class="btn-view">View Details</a>
+        </div>
+      </div>
+    {% empty %}
+      <p>No pearls available yet. Be the first to add one!</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Auction CTA -->
+<section class="auction-cta">
+  <h2> Join Live Auctions Every Monday</h2>
+  <p>Bid against collectors worldwide and secure rare pearls.</p>
+  <a href="{% url 'auction_list' %}" class="btn-primary">View Auctions</a>
+</section>
 
 {% endblock %}

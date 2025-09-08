@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Bilbo+Swash+Caps&display=swap');
+
+
+body {
+  margin: 0;
+  font-family: "Bilbo Swash Caps", cursive;
+  color: #333;
+}
+
+/* Hero Section */
+.hero {
+  background: url('../images/pearl_background.png') center/cover no-repeat;
+  position: relative;
+  height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.hero-overlay {
+  background: rgba(0, 0, 0, 0.55);
+  padding: 2.5rem 3rem;
+  text-align: center;
+  border-radius: 1rem;
+  max-width: 800px;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 2rem;
+  color: #eee;
+}
+
+.hero-actions a {
+  margin: 0 0.5rem;
+  padding: 0.9rem 1.8rem;
+  border-radius: 2rem;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background: #8a6fb5;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #fff;
+  color: #8a6fb5;
+  border: 2px solid #8a6fb5;
+}
+
+.btn-primary:hover {
+  background: #7459a3;
+}
+
+.btn-secondary:hover {
+  background: #f4f4f4;
+  border-color: #7459a3;
+}
+
+/* Featured Section */
+.featured {
+  padding: 3rem 2rem;
+  background: #f8f8fa;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 3rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: #444;
+}
+
+.pearl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.8rem;
+}
+
+.pearl-card {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pearl-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.pearl-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.pearl-info {
+  padding: 1rem 1.2rem;
+  text-align: left;
+}
+
+.pearl-info h3 {
+  margin: 0.5rem 0;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.pearl-info p {
+  font-size: 1.5rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+.btn-view {
+  display: inline-block;
+  margin-top: 0.6rem;
+  color: #8a6fb5;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1.25rem;
+}
+
+.btn-view:hover {
+  text-decoration: underline;
+}
+
+
+.auction-cta {
+  padding: 3rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #8a6fb5, #5e4a88);
+  color: #fff;
+}
+
+.auction-cta h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.auction-cta p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #eee;
+}
+
+.auction-cta a {
+  padding: 0.9rem 1.8rem;
+  border-radius: 2rem;
+  background: #fff;
+  color: #5e4a88;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.auction-cta a:hover {
+  background: #f4f4f4;
+  color: #452e6d;
+}
