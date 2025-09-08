@@ -44,9 +44,10 @@ class Certification(models.Model):
 
 class AuctionListing(models.Model):
     pearl = models.OneToOneField("Pearl", on_delete=models.CASCADE, related_name="auction")
-    starting_price = models.IntegerField()
+    reserve_price = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=False)
+    is_sold = models.BooleanField(default=False)
 
 
     def start_time(self):
@@ -68,11 +69,49 @@ class AuctionListing(models.Model):
 
     def current_price(self):
         highest_bid = self.bids.order_by('-amount').first()
-        return highest_bid.amount if highest_bid else self.starting_price
+        return highest_bid.amount if highest_bid else 0
+
+    def current_winner(self):
+        highest_bid = self.bids.order_by('-amount').first()
+        return highest_bid.bidder if highest_bid else None
+
+    def get_next_bid_increment(self):
+        price = self.current_price()
+
+        if price < 500:
+            return 25
+        elif price < 1000:
+            return 50
+        elif price < 5000:
+            return 100
+        elif price < 10000:
+            return 250
+        elif price < 25000:
+            return 500
+        elif price < 50000:
+            return 1000
+        elif price < 100000:
+            return 2500
+        elif price < 250000:
+            return 5000
+        elif price < 500000:
+            return 10000
+        elif price < 1000000:
+            return 25000
+        else:
+            return 50000
+
+    def get_min_next_bid(self):
+        return self.current_price() + self.get_next_bid_increment()
+
+    def has_met_reserve(self):
+        return self.current_price() >= self.reserve_price
 
     def status(self):
         now = timezone.now()
-        if self.is_open():
+        if self.is_sold:
+            return "Sold"
+        elif self.is_open():
             return "Running"
         elif now < self.start_time():
             return "Scheduled"
@@ -90,12 +129,14 @@ class Bid(models.Model):
     amount = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-
     def save(self, *args, **kwargs):
-        if self.amount <= self.auction.current_price:
-            raise ValueError("Bid must be higher than current price")
+        if not self.pk: 
+            min_required = self.auction.get_min_next_bid()
+            if self.amount < min_required:
+                raise ValueError(f"Your bid must be at least {min_required}")
+            self.auction.last_bid_time = timezone.now()
+            self.auction.save()
         super().save(*args, **kwargs)
 
-    
     def __str__(self):
-      return f"{self.bidder.username} bid {self.amount} on {self.auction.pearl.name}"
+        return f"{self.bidder.username} bid {self.amount} on {self.auction.pearl.name}"

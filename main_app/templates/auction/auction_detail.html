@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content %}
 <h1>{{ object.pearl.name }} Auction</h1>
 <p>Current Price: {{ object.current_price }}</p>
@@ -10,6 +12,10 @@
     {{ form.as_p }}
     <button type="submit">Place Bid</button>
   </form>
+
+  
+  <div id="auction-countdown" class="countdown-container"></div>
+
 {% else %}
   <p>Auction is not open for bidding right now.</p>
 {% endif %}
@@ -23,4 +29,6 @@
     <li>No bids yet.</li>
   {% endfor %}
 </ul>
+
+
 {% endblock %}

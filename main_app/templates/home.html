@@ -6,29 +6,10 @@
     {% if user.is_authenticated %}
         <p>Hello, <strong>{{ user.username }}</strong>!</p>
         <p>
-            <a href="{% url 'profile' %}">My Profile</a> |
-            <a href="{% url 'pearl_create' %}">Add a Pearl</a>
+            <a href="{% url 'profile' user.pk %}">Profile</a> 
         </p>
     {% else %}
-        <p><a href="{% url 'login' %}">Login</a> to add your pearls!</p>
+        <a href="{% url 'pearl_list' %}">Explore Pearls</a> 
     {% endif %}
 
-    <hr>
-
-    <h2>All Pearls</h2>
-    <div class="pearl-grid">
-        {% for pearl in pearls %}
-            <div class="pearl-card">
-                {% if pearl.image %}
-                    <a href="{% url 'pearl_detail' pearl.pk %}">
-                        <img src="{{ pearl.image.url }}" alt="{{ pearl.name }}" width="200">
-                    </a>
-                {% endif %}
-                <p><strong>{{ pearl.name }}</strong></p>
-                <p>by {{ pearl.owner.username }}</p>
-            </div>
-        {% empty %}
-            <p>No pearls have been added yet.</p>
-        {% endfor %}
-    </div>
 {% endblock %}

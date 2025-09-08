@@ -9,15 +9,18 @@
 <body>
     <nav>
         {% if user.is_authenticated %}
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'profile' %}">Profile</a>
-            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            <a href="{% url 'home' %}">Home</a> |
+            <a href="{% url 'profile' pk=user.id %}">Profile</a> |
+            <a href="{% url 'pearl_list' %}">All Pearls</a> |
+            <a href="{% url 'pearl_create' %}">Add Pearl</a> |
+            <a href="{% url 'auction_list' %}">Auctions</a> |
+            <form action="{% url 'logout' %}" method="post">
                 {% csrf_token %}
                 <button type="submit">Logout</button>
             </form>
         {% else %}
-            <a href="{% url 'login' %}">Login</a>
-            <a href="{% url 'signup' %}">Sign Up</a>
+            <a href="{% url 'login' %}">Login</a> |
+            <a href="{% url 'signup' %}">Sign Up</a> 
         {% endif %}
     </nav>
 
@@ -26,5 +29,20 @@
         {% endblock %}
     </div>
     <script src="{% static 'js/countdown.js' %}"></script>
+    <script src="{% static 'js/circular_countdown.js' %}"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Pass your auction countdown duration in seconds
+        const countdownDuration = 30;  // or pass dynamically from backend if available
+        circularCountdown({
+        containerSelector: "#auction-countdown",
+        duration: countdownDuration,
+        transition: "linear",
+        color: "#c39fe0",
+        size: 250,
+        initialPosition: "up",
+        });
+    });
+    </script>
 </body>
 </html>

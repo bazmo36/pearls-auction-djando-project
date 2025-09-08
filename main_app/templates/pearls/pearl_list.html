@@ -3,21 +3,22 @@
 {% block content %}
 <h1>All Pearls</h1>
 
-<a href="{% url 'pearl_create' %}">Add New Pearl</a>
+<a href="{% url 'pearl_create' %}">Add New Pearl</a><br><br>
 
-{% if pearls %}
-    <ul>
+    <div class="pearl-grid">
         {% for pearl in pearls %}
-        <li>
-            
-            <a href="{% url 'pearl_detail' pearl.pk %}">
-                <img src="{{pearl.image.url}}" alt="{{ pearl.name }}" width="100">
-            </a>
-        </li>
+            <a href="{% url 'profile' pk=pearl.owner.id %}">{{ pearl.owner.username }}</a>
+            <div class="pearl-card">
+                {% if pearl.image %}
+                    <a href="{% url 'pearl_detail' pearl.pk %}">
+                        <img src="{{ pearl.image.url }}" alt="{{ pearl.name }}" width="200">
+                    </a>
+                {% endif %}
+                <p><strong>{{ pearl.name }}</strong></p>
+            </div>
+        {% empty %}
+            <p>No pearls have been added yet.</p>
         {% endfor %}
-    </ul>
-{% else %}
-    <p>No pearls have been added yet.</p>
-{% endif %}
-
+    </div>
+    
 {% endblock %}

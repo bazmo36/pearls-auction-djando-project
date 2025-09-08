@@ -1,12 +1,17 @@
 from django.urls import path
-from .views import HomePageView, ProfileView, SignUpView, PearlCreateView, PearlListView, PearlDetailView, PearlUpdateView, PearlDeleteView, CertificationCreateView, CertificationDetailView,CertificationUpdateView,CertificationDeleteView,AuctionCreateView, AuctionUpdateView, AuctionDeleteView, AuctionListView, AuctionDetailView
+from .views import HomePageView, ProfileView, SignUpView, PearlCreateView, PearlListView, PearlDetailView, PearlUpdateView, PearlDeleteView, CertificationCreateView, CertificationDetailView,CertificationUpdateView,CertificationDeleteView,AuctionCreateView, AuctionUpdateView, AuctionDeleteView, AuctionListView, AuctionDetailView  
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),
 
     path("auth/signup/",SignUpView.as_view(), name="signup"),
 
-    path("profile/", ProfileView.as_view(), name="profile"),
+    path("profile/<int:pk>/", ProfileView.as_view(), name="profile"),
+    
+
+    path('auth/logout/', LogoutView.as_view(next_page='home'), name='logout'),
+
 
     # Pearl URL
     path("pearls/", PearlListView.as_view(), name="pearl_list"),

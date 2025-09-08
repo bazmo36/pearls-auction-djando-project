@@ -8,11 +8,17 @@
       <h2>🟢 Active Auctions</h2>
       <ul>
         {% for auction in active_auctions %}
-          <li>
-            {{ auction.pearl.name }} - Current Price: {{ auction.current_price }}<br>
-            Time left: <span class="countdown" data-time="{{ auction.end_time|date:'Y-m-d H:i:s' }}"></span>
-          </li>
-        {% endfor %}
+  <li>
+     {% if auction.pearl.pk %}
+        <a href="{% url 'auction_detail' auction.pearl.pk %}">
+          {{ auction.pearl.name }}
+        </a>
+     {% else %}
+       {{ auction.pearl.name }}
+     {% endif %}
+        - Current Price: {{ auction.current_price }}
+  </li>
+    {% endfor %}
       </ul>
     {% endif %}
 
@@ -21,7 +27,9 @@
       <ul>
         {% for auction in upcoming_auctions %}
           <li>
-            {{ auction.pearl.name }}<br>
+           <a href="{% url 'auction_detail' auction.pearl.pk %}">
+             {{ auction.pearl.name }}
+            </a><br>
             Starts in: <span class="countdown" data-time="{{ auction.start_time|date:'Y-m-d H:i:s' }}"></span>
           </li>
         {% endfor %}
