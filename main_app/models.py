@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
+from django.core.exceptions import ValidationError
 
 
 
@@ -14,6 +15,13 @@ class Pearl(models.Model):
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to="pearls/")
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+    color = models.CharField(max_length=50, blank=True, null=True)
+    shape = models.CharField(max_length=50, blank=True, null=True)
+    weight = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True, help_text="Weight in grams")
+    size = models.CharField(max_length=50, blank=True, null=True)
+    origin = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return f"{self.name} (owned by {self.owner.username})"
@@ -48,6 +56,7 @@ class AuctionListing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=False)
     is_sold = models.BooleanField(default=False)
+    last_bid_time = models.DateTimeField(null=True, blank=True)
 
 
     def start_time(self):
@@ -102,6 +111,9 @@ class AuctionListing(models.Model):
             return 50000
 
     def get_min_next_bid(self):
+
+        if self.current_price() == 0:
+            return max(self.reserve_price, 0)
         return self.current_price() + self.get_next_bid_increment()
 
     def has_met_reserve(self):
@@ -129,14 +141,29 @@ class Bid(models.Model):
     amount = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def clean(self):
+        if not self.auction.is_open():
+            raise ValidationError("Cannot bid: auction is not open.")
+        
+        if self.bidder == self.auction.pearl.owner:
+            raise ValidationError("You cannot bid on your own pearl.")
+        
+        min_required = self.auction.get_min_next_bid()
+
+        if self.amount < min_required:
+            raise ValidationError(f"Your bid must be at least {min_required}.")
+        
+
     def save(self, *args, **kwargs):
-        if not self.pk: 
-            min_required = self.auction.get_min_next_bid()
-            if self.amount < min_required:
-                raise ValueError(f"Your bid must be at least {min_required}")
+        is_create = self.pk is None
+        if is_create:
+            self.full_clean()
+
             self.auction.last_bid_time = timezone.now()
-            self.auction.save()
+            self.auction.save(update_fields=['last_bid_time'])
         super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.bidder.username} bid {self.amount} on {self.auction.pearl.name}"
+
+    

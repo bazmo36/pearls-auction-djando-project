@@ -7,15 +7,23 @@
 <p>Status: {{ object.status }}</p>
 
 {% if object.is_open %}
-  <form method="post">
+  <form method="post" id="bid-form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Place Bid</button>
+    <div class="bid-form">
+      {{ form.amount.label_tag }}
+      {{ form.amount }}
+      <button type="button" id="increase-bid-btn">+</button>
+    </div>
   </form>
 
-  
-  <div id="auction-countdown" class="countdown-container"></div>
-
+  <div id="auction-countdown"
+       class="countdown-container"
+       data-duration="{{ object.end_time|timeuntil:now|cut:' seconds'|default_if_none:'0' }}"
+       data-transition="linear"
+       data-color="#c39fe0"
+       data-size="300"
+       data-position="up">
+  </div>
 {% else %}
   <p>Auction is not open for bidding right now.</p>
 {% endif %}
@@ -24,7 +32,7 @@
 <a href="#" onclick="document.getElementById('bid-history').style.display='block'">Show Bids</a>
 <ul id="bid-history" style="display:none;">
   {% for bid in object.bids.all %}
-    <li>{{ bid.user.username }} bid {{ bid.amount }} at {{ bid.created_at }}</li>
+    <li>{{ bid.bidder.username }} bid {{ bid.amount }} at {{ bid.created_at }}</li>
   {% empty %}
     <li>No bids yet.</li>
   {% endfor %}

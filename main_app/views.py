@@ -279,5 +279,6 @@ class AuctionDetailView(LoginRequiredMixin, DetailView, FormView):
 
         context['current_price'] = auction.current_price()
         context['min_next_bid'] = auction.get_min_next_bid()
-        context['bid_history'] = auction.bids.order_by('-amount')[:10]  
+        context['bid_history'] = auction.bids.order_by('-amount')[:10] 
+        context['now'] = timezone.now() 
         return context
