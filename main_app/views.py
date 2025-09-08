@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 from .models import Pearl, Certification, AuctionListing
 from .forms import PearlForm, CertificationForm, BidForm
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 
 
@@ -265,13 +266,33 @@ class AuctionDetailView(LoginRequiredMixin, DetailView, FormView):
         if not auction.is_open():
             form.add_error(None, "Auction is not open.")
             return self.form_invalid(form)
+        
+        if auction.pearl.owner == self.request.user:
+            form.add_error(None, "You cannot bid on your own pearl.")
+            return self.form_invalid(form)
+
 
         bid = form.save(commit=False)
         bid.auction = auction
         bid.bidder = self.request.user
-        bid.save()
+        
+        try:
+            bid.save()
+        except ValidationError as err:
+            errors = err.message_dict if hasattr(err, 'message_dict') else err.messages
+
+            if isinstance(errors, dict):
+                for field, msgs in errors.items():
+                    for msg in msgs:
+                        form.add_error(field if field != "__all__" else None, msg)
+            else:
+                for msg in errors:
+                    form.add_error(None, msg)
+            return self.form_invalid(form)
 
         return super().form_valid(form)
+
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -4,7 +4,7 @@ from .models import Pearl, Certification, Bid
 class PearlForm(forms.ModelForm):
     class Meta:
         model = Pearl
-        fields = ["name", "description", "image"]
+        fields = ["name", "description", "image", "color", "shape", "weight", "size", "origin"]
 
 
 class CertificationForm(forms.ModelForm):
