@@ -1,22 +1,89 @@
 {% extends "base.html" %}
+{%load static%}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/pearl_form.css' %}">
 
-<h1>
+<div class="form-wrapper">
+  <h1 class="form-title">
     {% if form.instance.pk %}Edit Pearl{% else %}Add New Pearl{% endif %}
-</h1>
+  </h1>
 
-<form method="post" enctype="multipart/form-data">
+  <form method="post" enctype="multipart/form-data" class="pearl-form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn">
-        {% if form.instance.pk %}
-        Update
-        {% else %}
-        Create
-        {% endif %}
-    </button>
-</form>
 
-<a href="{% url 'pearl_list' %}">Back to all Pearls</a>
+    <div class="form-group">
+      {{ form.name.label_tag }}
+      {{ form.name }}
+      {% if form.name.errors %}
+        <div class="error">{{ form.name.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      {{ form.description.label_tag }}
+      {{ form.description }}
+      {% if form.description.errors %}
+        <div class="error">{{ form.description.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      {{ form.image.label_tag }}
+      {{ form.image }}
+      {% if form.image.errors %}
+        <div class="error">{{ form.image.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      {{ form.color.label_tag }}
+      {{ form.color }}
+      {% if form.color.errors %}
+        <div class="error">{{ form.color.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      {{ form.shape.label_tag }}
+      {{ form.shape }}
+      {% if form.shape.errors %}
+        <div class="error">{{ form.shape.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      {{ form.weight.label_tag }}
+      {{ form.weight }}
+      {% if form.weight.errors %}
+        <div class="error">{{ form.weight.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      {{ form.size.label_tag }}
+      {{ form.size }}
+      {% if form.size.errors %}
+        <div class="error">{{ form.size.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      {{ form.origin.label_tag }}
+      {{ form.origin }}
+      {% if form.origin.errors %}
+        <div class="error">{{ form.origin.errors }}</div>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-secondary">
+      {% if form.instance.pk %}
+      Update
+      {% else %}
+      Create
+      {% endif %}
+    </button>
+  </form>
+
+</div>
 {% endblock %}

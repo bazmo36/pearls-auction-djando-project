@@ -10,17 +10,16 @@
 
   <form method="post" enctype="multipart/form-data" class="edit-form">
     {% csrf_token %}
-
     <div class="form-group">
-      <label for="id_avatar">Profile Image</label>
-      {{ form.avatar }}
-      <div class="avatar-preview">
-            {% if form.instance.avatar %}
-                <img class="profile-avatar" src="{{ form.instance.avatar.url }}" alt="Avatar Preview">
-            {% else %}
-                <img class="profile-avatar" src="{% static 'images/default-avatar.jpg' %}" alt="Default Avatar">
-            {% endif %}
+       <div class="avatar-preview">
+          {% if profile.avatar %}
+            <img class="profile-avatar" src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}'s avatar">
+          {% else %}
+            <img class="profile-avatar" src="{% static 'images/default-avatar.jpg' %}" alt="Default Avatar">
+          {% endif %}
         </div>
+      <label for="id_avatar">Change Profile Image</label>
+      <input type="file" name="avatar" accept="image/*" id="id_avatar">
     </div>
 
     <div class="form-group">
