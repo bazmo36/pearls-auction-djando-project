@@ -11,12 +11,12 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="{% url 'home' %}" class="logo"><img src="../static/images/MOZALLO-logo2-edit.png" alt="logo"></a>
+            <a href="{% url 'home' %}" class="logo"><img src="{% static "images/MOZALLO-logo1.jpg" %}" alt="logo"></a>
             
             <div class="nav-links">
                 {% if user.is_authenticated %}
                     <a href="{% url 'home' %}">Home</a>
-                    <a href="{% url 'profile' pk=user.id %}">Profile</a>
+                    <a href="{% url 'profile' pk=user.profile.pk %}">Profile</a>
                     <a href="{% url 'pearl_list' %}">All Pearls</a>
                     <a href="{% url 'pearl_create' %}">Add Pearl</a>
                     <a href="{% url 'auction_list' %}">Auctions</a>
@@ -32,31 +32,19 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
+
     <main class="main-container">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
+
     <footer class="footer">
         <p>&copy; {{ now|date:"Y" }} Pearl Auction. All rights reserved.</p>
     </footer>
 
-    <!-- JS -->
+
     <script src="{% static 'js/countdown.js' %}"></script>
     <script src="{% static 'js/circular_countdown.js' %}"></script>
-    <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const countdownDuration = 30; 
-        circularCountdown({
-            containerSelector: "#auction-countdown",
-            duration: countdownDuration,
-            transition: "linear",
-            color: "#c39fe0",
-            size: 250,
-            initialPosition: "up",
-        });
-    });
-    </script>
+
 </body>
 </html>

@@ -1,24 +1,51 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-  <h1>{{ owner.username }}'s Profile</h1>
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
 
-  {% if pearls %}
-    <div>
-      {% for pearl in pearls %}
-        <div>
-          <a href="{% url 'pearl_detail' pearl.pk %}">
-            <img src="{{ pearl.image.url }}" alt="{{ pearl.name }}" width="200">
-          </a>
-        </div>
-      {% endfor %}
-    </div>
-  {% else %}
-    {% if request.user == profile_user %}
-      <p>You have not added any pearls yet.</p>
-      <a href="{% url 'pearl_create' %}">Add your first pearl</a>
+<div class="profile-container">
+
+  <div class="profile-header">
+    {% if profile.avatar %}
+      <img class="profile-avatar" src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}'s avatar">
     {% else %}
-      <p>{{ profile_user.username }} has not added any pearls yet.</p>
+      <img class="profile-avatar" src="{% static 'images/default-avatar.jpg' %}" alt="Default Avatar">
     {% endif %}
-  {% endif %}
+
+    <div class="profile-info">
+      <h2>{{ profile.user.username }}</h2>
+      <span class="bio">{{ profile.bio|default:"No bio yet." }}</span>
+      <span class="pearl-count">{{ pearls.count }} Pearls</span>
+
+      {% if request.user == profile.user %}
+        <a href="{% url 'profile_edit' pk=profile.pk %}" class="btn-edit">Edit Profile</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="profile-posts">
+    {% if pearls %}
+      <div class="post-grid">
+        {% for pearl in pearls %}
+          <div class="post-card">
+            <a href="{% url 'pearl_detail' pearl.pk %}">
+              <img src="{{ pearl.image.url }}" alt="{{ pearl.name }}">
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="no-pearls">
+        {% if request.user == profile.user %}
+          <p>You haven’t added any pearls yet.</p>
+          <a href="{% url 'pearl_create' %}" class="btn-primary">Add Your First Pearl</a>
+        {% else %}
+          <p>{{ profile.user.username }} hasn’t added any pearls yet.</p>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+</div>
 {% endblock %}

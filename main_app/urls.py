@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomePageView, ProfileView, SignUpView, PearlCreateView, PearlListView, PearlDetailView, PearlUpdateView, PearlDeleteView, CertificationCreateView, CertificationDetailView,CertificationUpdateView,CertificationDeleteView,AuctionCreateView, AuctionUpdateView, AuctionDeleteView, AuctionListView, AuctionDetailView  
+from .views import HomePageView, SignUpView, PearlCreateView, PearlListView, PearlDetailView, PearlUpdateView, PearlDeleteView, CertificationCreateView, CertificationDetailView,CertificationUpdateView,CertificationDeleteView,AuctionCreateView, AuctionUpdateView, AuctionDeleteView, AuctionListView, AuctionDetailView, ProfileDetailView, ProfileUpdateView
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
@@ -7,8 +7,9 @@ urlpatterns = [
 
     path("auth/signup/",SignUpView.as_view(), name="signup"),
 
-    path("profile/<int:pk>/", ProfileView.as_view(), name="profile"),
-    
+    path("profile/<int:pk>/", ProfileDetailView.as_view(), name="profile"),
+    path("profile/<int:pk>/edit/", ProfileUpdateView.as_view(), name="profile_edit"),
+
 
     path('auth/logout/', LogoutView.as_view(next_page='home'), name='logout'),
 

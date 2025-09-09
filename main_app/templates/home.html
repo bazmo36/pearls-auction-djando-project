@@ -11,7 +11,7 @@
     <p class="hero-subtitle">Bid, Collect, and Own Timeless Treasures</p>
     <div class="hero-actions">
       {% if user.is_authenticated %}
-        <a href="{% url 'profile' user.pk %}" class="btn-primary">My Profile</a>
+        <a href="{% url 'profile' pk=user.profile.pk %}" class="btn-primary">My Profile</a>
         <a href="{% url 'pearl_create' %}" class="btn-secondary">Add Pearl</a>
       {% else %}
         <a href="{% url 'signup' %}" class="btn-primary">Get Started</a>

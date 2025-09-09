@@ -6,11 +6,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
-from .models import Pearl, Certification, AuctionListing
+from .models import Pearl, Certification, AuctionListing, Profile
 from .forms import PearlForm, CertificationForm, BidForm
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-
 
 
 # Create your views here.
@@ -27,22 +26,34 @@ class SignUpView(CreateView):
     success_url = reverse_lazy("login")
     template_name = 'registration/signup.html'
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
 
-class ProfileView(LoginRequiredMixin, ListView):
-    model = Pearl
+        Profile.objects.create(user=self.object)
+        return response
+
+
+class ProfileDetailView(DetailView):
+    model = Profile
     template_name = "profile.html"
-    context_object_name = "pearls"
+    context_object_name = "profile"
 
-    
-    def get_queryset(self):
-
-        return Pearl.objects.filter(owner=self.kwargs['pk'])
-    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['owner'] = context['pearls'][0].owner
+        context["pearls"] = self.object.user.pearls.all()
         return context
-    
+
+
+
+class ProfileUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Profile
+    fields = ["avatar", "bio"]
+    template_name = 'profile_edit.html' 
+    success_url = reverse_lazy('profile_detail')
+
+
+    def test_func(self):
+        return self.get_object().user == self.request.user
 
     
 
@@ -84,7 +95,7 @@ class PearlUpdateView(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
     form_class = PearlForm
     template_name = "pearls/pearl_form.html"
     success_url = reverse_lazy('pearl_list')
-
+    
     
     def test_func(self):
         pearl = self.get_object()
