@@ -1,24 +1,35 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<h1>All Pearls</h1>
+<link rel="stylesheet" href="{% static 'css/pearl_list.css' %}">
 
-<a href="{% url 'pearl_create' %}">Add New Pearl</a><br><br>
+<div class="container">
+  <div class="header">
+    <h1>All Pearls</h1>
+    <a href="{% url 'pearl_create' %}" class="btn-add">➕ Add New Pearl</a>
+  </div>
 
-    <div class="pearl-grid">
-        {% for pearl in pearls %}
+  <div class="pearl-grid">
+    {% for pearl in pearls %}
+      <div class="pearl-card">
+        <a href="{% url 'pearl_detail' pearl.pk %}">
+          {% if pearl.image %}
+            <img src="{{ pearl.image.url }}" alt="{{ pearl.name }}">
+          {% else %}
+            <img src="{% static 'images/default-pearl.jpg' %}" alt="Default Pearl">
+          {% endif %}
+        </a>
+        <div class="pearl-info">
+          <p class="pearl-name">{{ pearl.name }}</p>
+          <p class="pearl-owner">By 
             <a href="{% url 'profile' pk=pearl.owner.id %}">{{ pearl.owner.username }}</a>
-            <div class="pearl-card">
-                {% if pearl.image %}
-                    <a href="{% url 'pearl_detail' pearl.pk %}">
-                        <img src="{{ pearl.image.url }}" alt="{{ pearl.name }}" width="200">
-                    </a>
-                {% endif %}
-                <p><strong>{{ pearl.name }}</strong></p>
-            </div>
-        {% empty %}
-            <p>No pearls have been added yet.</p>
-        {% endfor %}
-    </div>
-    
+          </p>
+        </div>
+      </div>
+    {% empty %}
+      <p class="no-pearls">No pearls have been added yet.</p>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}

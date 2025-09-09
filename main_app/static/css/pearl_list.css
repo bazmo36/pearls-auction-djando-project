@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Bilbo+Swash+Caps&display=swap');
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 30px 20px;
+  color: #333;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.header h1 {
+  font-family: 'Bilbo Swash Caps', cursive;
+  font-size: 2.8rem;
+  color: #3a2f55;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background-color: #a98dd1;
+  color: white;
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-add:hover {
+  background-color: #8f71c6;
+  transform: translateY(-2px);
+}
+
+.pearl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 30px;
+}
+
+.pearl-card {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.pearl-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.pearl-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+}
+
+.pearl-info {
+  padding: 15px;
+}
+
+.pearl-name {
+  font-family: 'Bilbo Swash Caps', cursive;
+  font-size: 1.6rem;
+  font-weight: normal;
+  color: #2d2350;
+  margin: 10px 0 5px 0;
+  letter-spacing: 0.5px;
+}
+
+.pearl-owner {
+  font-size: 1rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.pearl-owner a {
+  color: #5a57c9;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.pearl-owner a:hover {
+  text-decoration: underline;
+  color: #433fad;
+}
+
+.no-pearls {
+  font-style: italic;
+  color: #999;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 40px 0;
+}

@@ -17,8 +17,7 @@
                 {% if user.is_authenticated %}
                     <a href="{% url 'home' %}">Home</a>
                     <a href="{% url 'profile' pk=user.profile.pk %}">Profile</a>
-                    <a href="{% url 'pearl_list' %}">All Pearls</a>
-                    <a href="{% url 'pearl_create' %}">Add Pearl</a>
+                    <a href="{% url 'pearl_list' %}">Pearls</a>
                     <a href="{% url 'auction_list' %}">Auctions</a>
                     <form action="{% url 'logout' %}" method="post" class="logout-form">
                         {% csrf_token %}
