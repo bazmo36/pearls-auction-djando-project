@@ -6,21 +6,35 @@
 
 <div class="pearl-container">
   <div class="left-column">
-    <h1>{{ pearl.name }}</h1>
+    <h1 class="pearl-title">{{ pearl.name }}</h1>
     <img class="pearl-image" src="{{ pearl.image.url }}" alt="{{ pearl.name }}">
     <p class="pearl-description">{{ pearl.description }}</p>
     <p class="pearl-date">Created at: {{ pearl.created_at }}</p>
 
+    
+    <div class="pearl-attributes">
+      <h2>Pearl Details</h2>
+      <ul>
+        {% if pearl.color %}<li><strong>Color:</strong> {{ pearl.color }}</li>{% endif %}
+        {% if pearl.shape %}<li><strong>Shape:</strong> {{ pearl.shape }}</li>{% endif %}
+        {% if pearl.weight %}<li><strong>Weight:</strong> {{ pearl.weight }} g</li>{% endif %}
+        {% if pearl.size %}<li><strong>Size:</strong> {{ pearl.size }}</li>{% endif %}
+        {% if pearl.origin %}<li><strong>Origin:</strong> {{ pearl.origin }}</li>{% endif %}
+      </ul>
+    </div>
+
+    
     <div class="actions">
       {% if request.user == pearl.owner %}
         <a href="{% url 'pearl_update' pearl.id %}">Edit</a>
-        <form method='post' action="{% url 'pearl_delete' pearl.pk %}" style="display: inline;">
+        <form method="post" action="{% url 'pearl_delete' pearl.pk %}" style="display:inline;">
           {% csrf_token %}
           <button class="delete-btn">Delete</button>
         </form>
       {% endif %}
     </div>
 
+   
     <div class="actions">
       {% if not pearl.auction %}
         {% if request.user == pearl.owner %}
@@ -29,7 +43,7 @@
       {% elif pearl.auction.can_modify %}
         {% if request.user == pearl.owner %}
           <a href="{% url 'auction_update' pearl.auction.pk %}">Edit Auction</a>
-          <form method="post" action="{% url 'auction_delete' pearl.auction.pk %}" style="display: inline;">
+          <form method="post" action="{% url 'auction_delete' pearl.auction.pk %}" style="display:inline;">
             {% csrf_token %}
             <button class="delete-btn">Remove from Auction</button>
           </form>
@@ -40,6 +54,7 @@
     </div>
   </div>
 
+ 
   <div class="right-column">
     <div class="certifications">
       {% if pearl.certifications.all %}
