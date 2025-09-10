@@ -2,41 +2,107 @@
 {% load static %}
 
 {% block content %}
-<h1>{{ object.pearl.name }} Auction</h1>
-<p>Current Price: {{ object.current_price }}</p>
-<p>Status: {{ object.status }}</p>
 
-{% if object.is_open %}
-  <form method="post" id="bid-form">
-    {% csrf_token %}
-    <div class="bid-form">
-      {{ form.amount.label_tag }}
-      {{ form.amount }}
-      <button type="button" id="increase-bid-btn">+</button>
+<link rel="stylesheet" href="{% static 'css/auction_detail.css' %}">
+
+<div class="auction-container">
+  <div class="auction-layout">
+
+ 
+    <div class="pearl-section">
+      <h1 class="pearl-title">{{ object.pearl.name }}</h1>
+      <img class="pearl-image" src="{{ object.pearl.image.url }}" alt="{{ object.pearl.name }}">
+      <p class="pearl-description">{{ object.pearl.description }}</p>
+      <p class="pearl-date">Created at: {{ object.pearl.created_at }}</p>
+
+      <div class="pearl-attributes">
+        <h2>Pearl Information</h2>
+        <ul>
+          {% if object.pearl.color %}<li><strong>Color:</strong> {{ object.pearl.color }}</li>{% endif %}
+          {% if object.pearl.shape %}<li><strong>Shape:</strong> {{ object.pearl.shape }}</li>{% endif %}
+          {% if object.pearl.weight %}<li><strong>Weight:</strong> {{ object.pearl.weight }} g</li>{% endif %}
+          {% if object.pearl.size %}<li><strong>Size:</strong> {{ object.pearl.size }}</li>{% endif %}
+          {% if object.pearl.origin %}<li><strong>Origin:</strong> {{ object.pearl.origin }}</li>{% endif %}
+        </ul>
+      </div>
+
+      <div class="certifications">
+        <h2>Certifications</h2>
+        {% if object.pearl.certifications.all %}
+          <div class="cert-list">
+            {% for cert in object.pearl.certifications.all %}
+              <a href="{% url 'certification_detail' cert.pk %}">
+                <img src="{{ cert.certificate_image.url }}" alt="Certificate {{ cert.certificate_number }}">
+              </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="no-cert-message">No certifications yet.</p>
+        {% endif %}
+      </div>
     </div>
-  </form>
 
-  <div id="auction-countdown"
-       class="countdown-container"
-       data-duration="{{ object.end_time|timeuntil:now|cut:' seconds'|default_if_none:'0' }}"
-       data-transition="linear"
-       data-color="#c39fe0"
-       data-size="300"
-       data-position="up">
+ 
+    <div class="auction-section">
+      <h2 class="auction-title">Auction Details</h2>
+      <p class="auction-status">
+        Status:
+        <span class="{% if object.is_open %}status-open{% else %}status-closed{% endif %}">
+          {{ object.status }}
+        </span>
+      </p>
+      <p class="auction-price">Current Price: <strong>{{ object.current_price }}</strong></p>
+
+      {% if object.is_open %}
+      <div class="auction-bid-section">
+        <h3>Place Your Bid</h3>
+        <form method="post" id="bid-form" class="bid-form">
+          {% csrf_token %}
+          <label for="{{ form.amount.id_for_label }}">Your Bid</label>
+          <div class="bid-input">
+            {{ form.amount }}
+            <button type="button" id="increase-bid-btn" class="btn-increase">+</button>
+          </div>
+          <button type="submit" class="btn-submit">Submit Bid</button>
+        </form>
+
+        <div id="auction-countdown"
+             class="countdown-container"
+             data-duration="{{ object.end_time|timeuntil:now|cut:' seconds'|default_if_none:'0' }}"
+             data-transition="linear"
+             data-color="#c39fe0"
+             data-size="200"
+             data-position="up">
+        </div>
+      </div>
+      {% else %}
+      <div class="auction-closed">
+        <p>Auction is not open for bidding right now.</p>
+      </div>
+      {% endif %}
+
+      <div class="bid-history-section">
+        <h3>Bid History</h3>
+        <button id="toggle-bids" class="toggle-bids">Show Bids</button>
+        <ul id="bid-history" class="bid-history">
+          {% for bid in object.bids.all %}
+            <li><span class="bidder">{{ bid.bidder.username }}</span> bid <strong>{{ bid.amount }}</strong> at <em>{{ bid.created_at }}</em></li>
+          {% empty %}
+            <li>No bids yet.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
   </div>
-{% else %}
-  <p>Auction is not open for bidding right now.</p>
-{% endif %}
-
-<h3>Bid History</h3>
-<a href="#" onclick="document.getElementById('bid-history').style.display='block'">Show Bids</a>
-<ul id="bid-history" style="display:none;">
-  {% for bid in object.bids.all %}
-    <li>{{ bid.bidder.username }} bid {{ bid.amount }} at {{ bid.created_at }}</li>
-  {% empty %}
-    <li>No bids yet.</li>
-  {% endfor %}
-</ul>
+</div>
 
 
+<script>
+document.getElementById("toggle-bids").addEventListener("click", function() {
+  const history = document.getElementById("bid-history");
+  history.classList.toggle("show");
+  this.textContent = history.classList.contains("show") ? "Hide Bids" : "Show Bids";
+});
+</script>
 {% endblock %}
