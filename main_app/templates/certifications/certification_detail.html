@@ -1,22 +1,36 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-    <h2>Certification: {{ certification.certificate_number }}</h2>
-  <p><strong>Certified by:</strong> {{ certification.certified_by }}</p>
-  <p><strong>Grade:</strong> {{ certification.get_grade_display }}</p>
-  <p><strong>Issued at:</strong> {{ certification.issued_at }}</p>
+<link rel="stylesheet" href="{% static 'css/certification_detail.css' %}">
+
+<div class="cert-container">
+  <h2 class="cert-title">Certification #{{ certification.certificate_number }}</h2>
+
+  <div class="cert-meta">
+    <p><strong>Certified by:</strong> {{ certification.certified_by }}</p>
+    <p><strong>Grade:</strong> {{ certification.get_grade_display }}</p>
+    <p><strong>Issued on:</strong> {{ certification.issued_at }}</p>
+  </div>
+
   {% if certification.certificate_image %}
-    <img src="{{ certification.certificate_image.url }}" width="300">
+    <div class="cert-image-wrapper">
+      <img class="cert-image" src="{{ certification.certificate_image.url }}" alt="Certificate Image">
+    </div>
   {% endif %}
 
-   {% if request.user == certification.pearl.owner %}
-    <a href="{% url 'certification_update' certification.pk %}">Edit</a>
-    <form method='post' action="{% url 'certification_delete' certification.pk %}">
+  {% if request.user == certification.pearl.owner %}
+    <div class="cert-actions">
+      <a href="{% url 'certification_update' certification.pk %}" class="btn btn-edit">Edit</a>
+      <form method='post' action="{% url 'certification_delete' certification.pk %}" style="display: inline;">
         {% csrf_token %}
-        <button>Delete</button>
-    </form>
+        <button class="btn btn-delete">Delete</button>
+      </form>
+    </div>
   {% endif %}
 
-  <a href="{% url 'pearl_detail' certification.pearl.id %}">← Back to {{ certification.pearl.name }}</a>
-
-{% endblock  %}
+  <div class="cert-back">
+    <a href="{% url 'pearl_detail' certification.pearl.id %}">← Back to {{ certification.pearl.name }}</a>
+  </div>
+</div>
+{% endblock %}

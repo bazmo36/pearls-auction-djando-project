@@ -1,46 +1,70 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/pearl_detail.css' %}">
+
+<div class="pearl-container">
+  <div class="left-column">
     <h1>{{ pearl.name }}</h1>
-    <img src="{{ pearl.image.url }}" alt="{{ pearl.name }}" width="200">
-    <p>{{ pearl.description }}</p>
-    <p>Created at: {{ pearl.created_at }}</p>
+    <img class="pearl-image" src="{{ pearl.image.url }}" alt="{{ pearl.name }}">
+    <p class="pearl-description">{{ pearl.description }}</p>
+    <p class="pearl-date">Created at: {{ pearl.created_at }}</p>
 
-    {%if request.user == pearl.owner %}
-    <a href="{% url 'pearl_update' pearl.id %}" class="btn">Edit</a>
-    <form method='post' action="{% url 'pearl_delete' pearl.pk %}">
-        {% csrf_token %}
-        <button>Delete</button>
-    </form>
-    {%endif%}
+    <div class="actions">
+      {% if request.user == pearl.owner %}
+        <a href="{% url 'pearl_update' pearl.id %}">Edit</a>
+        <form method='post' action="{% url 'pearl_delete' pearl.pk %}" style="display: inline;">
+          {% csrf_token %}
+          <button class="delete-btn">Delete</button>
+        </form>
+      {% endif %}
+    </div>
 
-    {% if request.user == pearl.owner %}
-    <a href="{% url 'certification_create' pearl.pk %}" class="btn btn-success">Add Certification</a>
-    {% endif %}
- 
-    {% if pearl.certifications.all %}
-    <h2>Certifications</h2>
-    {% for cert in pearl.certifications.all %}
-        <div class="certification">
-          <a href="{% url 'certification_detail' cert.pk %}">
-            <img src="{{ cert.certificate_image.url }}" alt="Certificate {{ cert.certificate_number }}" width="200">
-        </a>
-        </div>
-    {% endfor %}
-{% endif %}
+    <div class="actions">
+      {% if not pearl.auction %}
+        {% if request.user == pearl.owner %}
+          <a href="{% url 'auction_create' pearl.pk %}">Add to Auction</a>
+        {% endif %}
+      {% elif pearl.auction.can_modify %}
+        {% if request.user == pearl.owner %}
+          <a href="{% url 'auction_update' pearl.auction.pk %}">Edit Auction</a>
+          <form method="post" action="{% url 'auction_delete' pearl.auction.pk %}" style="display: inline;">
+            {% csrf_token %}
+            <button class="delete-btn">Remove from Auction</button>
+          </form>
+        {% endif %}
+      {% else %}
+        <p class="auction-message">This pearl is in an active auction and cannot be changed.</p>
+      {% endif %}
+    </div>
+  </div>
 
-{% if not pearl.auction %}
-  <a href="{% url 'auction_create' pearl.pk %}" >Add to Auction</a>
-{% elif pearl.auction.can_modify %}
-  <a href="{% url 'auction_update' pearl.auction.pk %}">Edit Auction</a>
-  <form method="post" action="{% url 'auction_delete' pearl.auction.pk %}" >
-    {% csrf_token %}
-    <button>Remove from Auction</button>
-  </form>
-
-{% else %}
-  <p>This pearl is in an active auction and cannot be changed.</p>
-{% endif %}
-
-
+  <div class="right-column">
+    <div class="certifications">
+      {% if pearl.certifications.all %}
+        <h2>Certifications</h2>
+        {% for cert in pearl.certifications.all %}
+          <div class="certification">
+            <a href="{% url 'certification_detail' cert.pk %}">
+              <img src="{{ cert.certificate_image.url }}" alt="Certificate {{ cert.certificate_number }}">
+            </a>
+          </div>
+        {% endfor %}
+        {% if request.user == pearl.owner %}
+          <div class="actions">
+            <a href="{% url 'certification_create' pearl.pk %}">Add Certification</a>
+          </div>
+        {% endif %}
+      {% else %}
+        <p class="no-cert-message">No certifications yet.</p>
+        {% if request.user == pearl.owner %}
+          <div class="actions">
+            <a href="{% url 'certification_create' pearl.pk %}">Add Certification</a>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>
 {% endblock %}

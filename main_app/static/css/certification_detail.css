@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Bilbo+Swash+Caps&display=swap');
+
+.cert-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  font-family: 'Bilbo Swash Caps', sans-serif;
+  padding: 2rem;
+}
+
+.cert-title {
+  font-size: 3rem;
+  color: #5c3d94;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.cert-meta p {
+  font-size: 1.6rem;
+  margin: 0.6rem 0;
+  line-height: 1.6;
+}
+
+.cert-image-wrapper {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.cert-image {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.no-cert-message {
+  font-size: 1.4rem;
+  color: #999;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+
+.cert-actions {
+  margin-top: 3rem;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.cert-actions .btn {
+  padding: 1rem 2rem;
+  font-size: 1.4rem;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Bilbo Swash Caps', sans-serif;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.cert-actions .btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-edit {
+  background-color: #896cb7;
+  color: white;
+  border: none;
+}
+
+.btn-edit:hover {
+  background-color: #7255a3;
+}
+
+.btn-delete {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+}
+
+.btn-delete:hover {
+  background-color: #c0392b;
+}
+
+.cert-back {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.cert-back a {
+  color: #5c3d94;
+  font-size: 1.6rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.cert-back a:hover {
+  text-decoration: underline;
+}
