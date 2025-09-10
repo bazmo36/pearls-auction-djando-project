@@ -65,40 +65,65 @@ class Certification(models.Model):
 class AuctionListing(models.Model):
     pearl = models.OneToOneField("Pearl", on_delete=models.CASCADE, related_name="auction")
     reserve_price = models.PositiveIntegerField(default=0)
+    start_price = models.PositiveIntegerField(default=0)  
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+    start_time = models.DateTimeField(null=True, blank=True)  
+    end_time = models.DateTimeField(null=False, blank=False)    
+
     is_active = models.BooleanField(default=False)
     is_sold = models.BooleanField(default=False)
     last_bid_time = models.DateTimeField(null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        
+        if not self.start_time:
+            now = timezone.now()
+            days_ahead = 3 - now.weekday()  
+            if days_ahead <= 0:  
+                days_ahead += 7
+            self.start_time = (now + timedelta(days=days_ahead)).replace(
+                hour=0, minute=0, second=0, microsecond=0
+            )
 
-    def start_time(self):
-        created_date = self.created_at
-        days_ahead = 0 - created_date.weekday()
-        if days_ahead <= 0:
-            days_ahead += 7
-        return (created_date + timedelta(days=days_ahead)).replace(hour=0, minute=0, second=0, microsecond=0)
+       
+        if not self.end_time:
+            self.end_time = self.start_time.replace(hour=23, minute=59, second=59)
 
-    def end_time(self):
-        return self.start_time().replace(hour=23, minute=59, second=59)
+        super().save(*args, **kwargs)
 
+    # def is_open(self):
+    #     now = timezone.now()
+    #     return self.start_time <= now <= self.end_time
+
+    # def can_modify(self):
+    #     return timezone.now() < self.start_time
+    
     def is_open(self):
+        if not self.start_time or not self.end_time:
+            return False
         now = timezone.now()
-        return self.start_time() <= now <= self.end_time()
+        return self.start_time <= now <= self.end_time
 
     def can_modify(self):
-        return timezone.now() < self.start_time()
+        if not self.start_time:
+            return True 
+        return timezone.now() < self.start_time
+
 
     def current_price(self):
         highest_bid = self.bids.order_by('-amount').first()
-        return highest_bid.amount if highest_bid else 0
-
+        if highest_bid:
+            return highest_bid.amount
+        return self.start_price  
+    
     def current_winner(self):
         highest_bid = self.bids.order_by('-amount').first()
         return highest_bid.bidder if highest_bid else None
 
     def get_next_bid_increment(self):
         price = self.current_price()
-
         if price < 500:
             return 25
         elif price < 1000:
@@ -123,9 +148,8 @@ class AuctionListing(models.Model):
             return 50000
 
     def get_min_next_bid(self):
-
         if self.current_price() == 0:
-            return max(self.reserve_price, 0)
+            return max(self.start_price, self.reserve_price)
         return self.current_price() + self.get_next_bid_increment()
 
     def has_met_reserve(self):
@@ -137,7 +161,7 @@ class AuctionListing(models.Model):
             return "Sold"
         elif self.is_open():
             return "Running"
-        elif now < self.start_time():
+        elif now < self.start_time:
             return "Scheduled"
         else:
             return "Closed"

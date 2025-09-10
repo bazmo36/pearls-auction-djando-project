@@ -68,17 +68,11 @@ class PearlListView(LoginRequiredMixin, ListView):
 
 
 
-
-
-
 class PearlDetailView(LoginRequiredMixin, DetailView):
     model = Pearl
     template_name = "pearls/pearl_detail.html"
     
 
-
-
-    
 
 class PearlCreateView(LoginRequiredMixin, CreateView):
     model = Pearl
@@ -171,13 +165,12 @@ class CertificationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteVie
         return certification.pearl.owner == self.request.user
     
 
-class AuctionCreateView(LoginRequiredMixin, CreateView):
+class AuctionCreateView(LoginRequiredMixin, CreateView): 
     model = AuctionListing
-    fields = ['reserve_price']
+    fields = ['reserve_price', 'start_price']  
     template_name = 'auction/auction_form.html'
 
     def dispatch(self, request, *args, **kwargs):
-
         self.pearl = get_object_or_404(Pearl, pk=kwargs['pk'])
 
         if hasattr(self.pearl, 'auction'):
@@ -187,7 +180,6 @@ class AuctionCreateView(LoginRequiredMixin, CreateView):
             return self.handle_no_permission()
         
         return super().dispatch(request, *args, **kwargs) 
-    
     
     def form_valid(self, form):
         form.instance.pearl = self.pearl
@@ -200,7 +192,7 @@ class AuctionCreateView(LoginRequiredMixin, CreateView):
 
 class AuctionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = AuctionListing
-    fields = ['reserve_price']
+    fields = ['reserve_price', 'start_price']  
     template_name = 'auction/auction_form.html'
 
     def test_func(self):
@@ -209,6 +201,7 @@ class AuctionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     
     def get_success_url(self):
         return reverse_lazy('pearl_detail', kwargs={'pk': self.object.pearl.pk})
+
 
 class AuctionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = AuctionListing
@@ -221,13 +214,12 @@ class AuctionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return reverse_lazy('pearl_detail', kwargs={'pk': self.object.pearl.pk})
     
 
-class AuctionListView(TemplateView, LoginRequiredMixin):
+class AuctionListView(LoginRequiredMixin, TemplateView): 
     model = AuctionListing
     template_name = 'auction/auction_list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         now = timezone.now()
 
         all_auctions = AuctionListing.objects.select_related('pearl')
@@ -237,8 +229,8 @@ class AuctionListView(TemplateView, LoginRequiredMixin):
         closed_auctions = []
 
         for auction in all_auctions:
-            start = auction.start_time()
-            end = auction.end_time()
+            start = auction.start_time  
+            end = auction.end_time
 
             if start <= now <= end:
                 active_auctions.append(auction)
@@ -247,12 +239,16 @@ class AuctionListView(TemplateView, LoginRequiredMixin):
             else:
                 closed_auctions.append(auction)
 
+
         context['active_auctions'] = active_auctions
         context['upcoming_auctions'] = upcoming_auctions
         context['closed_auctions'] = closed_auctions
 
         return context
     
+    
+    
+
 class AuctionDetailView(LoginRequiredMixin, DetailView, FormView):
     model = AuctionListing
     template_name = 'auction/auction_detail.html'
@@ -266,7 +262,6 @@ class AuctionDetailView(LoginRequiredMixin, DetailView, FormView):
         return self.request.path
 
     def get_form_kwargs(self):
-       
         kwargs = super().get_form_kwargs()
         kwargs['auction'] = self.get_object()
         return kwargs
@@ -274,7 +269,6 @@ class AuctionDetailView(LoginRequiredMixin, DetailView, FormView):
     def form_valid(self, form):
         auction = self.get_object()
 
-      
         if not auction.is_open():
             form.add_error(None, "Auction is not open.")
             return self.form_invalid(form)
@@ -282,7 +276,6 @@ class AuctionDetailView(LoginRequiredMixin, DetailView, FormView):
         if auction.pearl.owner == self.request.user:
             form.add_error(None, "You cannot bid on your own pearl.")
             return self.form_invalid(form)
-
 
         bid = form.save(commit=False)
         bid.auction = auction
@@ -292,7 +285,6 @@ class AuctionDetailView(LoginRequiredMixin, DetailView, FormView):
             bid.save()
         except ValidationError as err:
             errors = err.message_dict if hasattr(err, 'message_dict') else err.messages
-
             if isinstance(errors, dict):
                 for field, msgs in errors.items():
                     for msg in msgs:
@@ -304,16 +296,16 @@ class AuctionDetailView(LoginRequiredMixin, DetailView, FormView):
 
         return super().form_valid(form)
 
-
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         auction = self.get_object()
 
         context['current_price'] = auction.current_price()
         context['min_next_bid'] = auction.get_min_next_bid()
-        context['bid_history'] = auction.bids.order_by('-amount')[:10] 
-        context['now'] = timezone.now() 
-        seconds_left = int((auction.end_time() - timezone.now()).total_seconds())
+        context['bid_history'] = auction.bids.order_by('-amount')[:10]
+        context['now'] = timezone.now()
+
+       
+        seconds_left = int((auction.end_time - timezone.now()).total_seconds())
         context['duration_seconds'] = seconds_left if seconds_left > 0 else 0
         return context
