@@ -4,16 +4,18 @@
   max-width: 600px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #f9f6fc;
+  background-color: #f9f9f9; /* changed from #f9f6fc to match cert form */
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(195, 159, 224, 0.3);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* lighter shadow like cert form */
+  font-family: 'Bilbo Swash Caps', cursive;
 }
 
 .form-container h2 {
   text-align: center;
   color: #5e328b;
   margin-bottom: 1.5rem;
-  font-family: "Bilbo Swash Caps", cursive;
+  font-family: 'Bilbo Swash Caps', cursive;
+  font-size: 2.8rem;
 }
 
 .edit-form .form-group {
@@ -25,24 +27,31 @@
   margin-bottom: 0.5rem;
   font-weight: bold;
   color: #5e328b;
+  font-size: 1.4rem;
 }
 
+.edit-form input[type="text"],
+.edit-form input[type="email"],
 .edit-form input[type="file"],
 .edit-form textarea {
   width: 100%;
-  padding: 0.6rem;
-  border: 1px solid #c39fe0;
-  border-radius: 6px;
-  font-size: 1rem;
+  padding: 0.5rem;               
+  border: 1px solid #ddd;         
+  border-radius: 4px; 
+  font-size: 1rem; 
+  background-color: #fff; 
+  color: #555; 
+  box-sizing: border-box;
 }
 
 .edit-form textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 80px;
 }
 
 .avatar-preview {
   margin-top: 0.5rem;
+  text-align: center;
 }
 
 .avatar-preview img {
@@ -51,7 +60,7 @@
   object-fit: cover;
   border-radius: 50%;
   border: 2px solid #c39fe0;
-  display: block;
+  display: inline-block;
 }
 
 .btn-save {
@@ -60,13 +69,13 @@
   padding: 0.7rem;
   background-color: #c39fe0;
   color: white;
-  font-size: 1rem;
+  font-size: 1.2rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   font-weight: bold;
-  font-family: "Bilbo Swash Caps", cursive;
+  font-family: 'Bilbo Swash Caps', cursive;
 }
 
 .btn-save:hover {

@@ -1,10 +1,56 @@
 {% extends "base.html" %}
-{% block content %}
-  <h2>Add Certification for: {{ pearl.name }}</h2>
+{% load static %}
 
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit Certification</button>
-  </form>
+{% block content %}
+  <link rel="stylesheet" href="{% static 'css/certification_form.css' %}">
+
+  <div class="form-wrapper">
+    <h2 class="form-title">Add Certification for: {{ pearl.name }}</h2>
+
+    <form method="post" enctype="multipart/form-data" class="pearl-form">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="{{ form.certified_by.id_for_label }}">Certified by:</label>
+        {{ form.certified_by }}
+        {% if form.certified_by.errors %}
+          <div class="error">{{ form.certified_by.errors|striptags }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.certificate_number.id_for_label }}">Certificate number:</label>
+        {{ form.certificate_number }}
+        {% if form.certificate_number.errors %}
+          <div class="error">{{ form.certificate_number.errors|striptags }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.grade.id_for_label }}">Grade:</label>
+        {{ form.grade }}
+        {% if form.grade.errors %}
+          <div class="error">{{ form.grade.errors|striptags }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.issued_at.id_for_label }}">Issued at:</label>
+        {{ form.issued_at }}
+        {% if form.issued_at.errors %}
+          <div class="error">{{ form.issued_at.errors|striptags }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.certificate_image.id_for_label }}">Certificate image:</label>
+        {{ form.certificate_image }}
+        {% if form.certificate_image.errors %}
+          <div class="error">{{ form.certificate_image.errors|striptags }}</div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn btn-secondary">Submit Certification</button>
+    </form>
+  </div>
 {% endblock %}
