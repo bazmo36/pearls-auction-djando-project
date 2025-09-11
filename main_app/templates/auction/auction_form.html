@@ -1,16 +1,28 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-  <h2>{% if form.instance.pk %}Edit Auction{% else %}Add Auction{% endif %}</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-     <button type="submit" >
-        {% if form.instance.pk %}
-        Update
-        {% else %}
-        Create
-        {% endif %}
-    </button>
-  </form>
+  <link rel="stylesheet" href="{% static 'css/auction_form.css' %}">
+
+  <div class="form-wrapper">
+    <h2 class="form-title">
+      {% if form.instance.pk %}Edit Auction{% else %}Add Auction{% endif %}
+    </h2>
+
+    <form method="post" class="auction-form">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+            <div class="error">{{ field.errors.as_text|striptags }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-submit">
+        {% if form.instance.pk %}Update{% else %}Create{% endif %}
+      </button>
+    </form>
+  </div>
 {% endblock %}

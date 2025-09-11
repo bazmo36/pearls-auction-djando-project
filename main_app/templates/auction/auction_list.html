@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 {% load static %}
 
 {% block content %}
@@ -14,14 +14,21 @@
         <h2>🟢 Active Auctions</h2>
         <div class="auction-grid">
           {% for auction in active_auctions %}
-            <div class="auction-card">
+            <a href="{% url 'auction_detail' auction.pearl.pk %}" class="auction-card">
               {% if auction.pearl.image %}
-                <img src="{{ auction.pearl.image.url }}" alt="{{ auction.pearl.name }}">
+                <div class="auction-image-container">
+                  <img src="{{ auction.pearl.image.url }}" alt="{{ auction.pearl.name }}">
+                </div>
               {% endif %}
-              <h3>{{ auction.pearl.name }}</h3>
-              <p class="price">Current Price: {{ auction.current_price }}</p>
-              <a class="btn-view" href="{% url 'auction_detail' auction.pearl.pk %}">View Auction</a>
-            </div>
+              <div class="auction-info">
+                <p class="countdown-label">Ends in:</p>
+                <p class="countdown"
+                   data-start="{{ auction.start_time|date:'c' }}"
+                   data-end="{{ auction.end_time|date:'c' }}">
+                </p>
+                <p class="price">Current Price: {{ auction.current_price }}</p>
+              </div>
+            </a>
           {% endfor %}
         </div>
       </div>
@@ -32,15 +39,20 @@
         <h2>🕒 Upcoming Auctions</h2>
         <div class="auction-grid">
           {% for auction in upcoming_auctions %}
-            <div class="auction-card">
+            <a href="{% url 'auction_detail' auction.pearl.pk %}" class="auction-card">
               {% if auction.pearl.image %}
-                <img src="{{ auction.pearl.image.url }}" alt="{{ auction.pearl.name }}">
+                <div class="auction-image-container">
+                  <img src="{{ auction.pearl.image.url }}" alt="{{ auction.pearl.name }}">
+                </div>
               {% endif %}
-              <h3>{{ auction.pearl.name }}</h3>
-              <p class="countdown-label">Starts in:</p>
-              <p class="countdown" data-time="{{ auction.start_time|date:'Y-m-d H:i:s' }}"></p>
-              <a class="btn-view" href="{% url 'auction_detail' auction.pearl.pk %}">View Details</a>
-            </div>
+              <div class="auction-info">
+                <p class="countdown-label">Starts in:</p>
+                <p class="countdown"
+                   data-start="{{ auction.start_time|date:'c' }}"
+                   data-end="{{ auction.end_time|date:'c' }}">
+                </p>
+              </div>
+            </a>
           {% endfor %}
         </div>
       </div>
@@ -51,14 +63,16 @@
         <h2>🔴 Closed Auctions</h2>
         <div class="auction-grid">
           {% for auction in closed_auctions %}
-            <div class="auction-card">
+            <a href="{% url 'auction_detail' auction.pearl.pk %}" class="auction-card">
               {% if auction.pearl.image %}
-                <img src="{{ auction.pearl.image.url }}" alt="{{ auction.pearl.name }}">
+                <div class="auction-image-container">
+                  <img src="{{ auction.pearl.image.url }}" alt="{{ auction.pearl.name }}">
+                </div>
               {% endif %}
-              <h3>{{ auction.pearl.name }}</h3>
-              <p class="ended-label">Ended on: {{ auction.end_time|date:"D M d, Y H:i" }}</p>
-              <a class="btn-view" href="{% url 'auction_detail' auction.pearl.pk %}">View Auction</a>
-            </div>
+              <div class="auction-info">
+                <p class="ended-label">Ended on: {{ auction.end_time|date:"D M d, Y H:i" }}</p>
+              </div>
+            </a>
           {% endfor %}
         </div>
       </div>

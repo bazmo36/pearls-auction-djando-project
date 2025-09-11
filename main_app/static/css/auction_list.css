@@ -1,14 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Bilbo+Swash+Caps&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bilbo+Swash+Caps&family=Roboto:wght@400;500;700&display=swap');
 
 body {
-  font-family: 'Bilbo Swash Caps', cursive;
+  font-family: 'Roboto', sans-serif;
   background-color: #fdfbfd;
   color: #333;
+  margin: 0;
+  padding: 0;
 }
 
+
 .auction-list-container {
-  max-width: 1200px;
-  margin: 2rem auto;
   padding: 2rem;
 }
 
@@ -16,94 +17,116 @@ body {
   text-align: center;
   font-size: 3rem;
   color: #6d4d9d;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
+  font-family: 'Bilbo Swash Caps', cursive;
 }
 
-.auction-section {
-  margin-bottom: 3rem;
-}
 
 .auction-section h2 {
-  font-size: 2rem;
+  font-family: 'Bilbo Swash Caps', cursive;
+  font-size: 2.2rem;
   color: #5e328b;
   margin-bottom: 1.5rem;
   border-left: 5px solid #cbb4e3;
-  padding-left: 1rem;
+  padding-left: 0.8rem;
 }
 
 .auction-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
-  justify-content: center;
 }
 
 .auction-card {
-  background: #fff;
-  border: 1px solid #e3d7f1;
-  border-radius: 10px;
-  padding: 1rem;
-  width: 280px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  background-color: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
 }
 
 .auction-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-5px);
 }
 
-.auction-card img {
+.auction-image-container {
   width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 1rem;
 }
 
-.auction-card h3 {
-  font-size: 1.6rem;
-  color: #6d4d9d;
+.auction-image-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.auction-info {
+  padding: 1rem;
+  text-align: center;
+}
+
+.countdown-label {
+  font-size: 1rem;
   margin-bottom: 0.5rem;
+  color: #333;
 }
 
-.price,
-.countdown-label,
-.ended-label {
-  font-size: 1.2rem;
-  color: #555;
-  margin-bottom: 0.5rem;
-}
-
-.countdown {
+.price {
   font-weight: bold;
-  color: #b04fc1;
   font-size: 1.2rem;
+  margin-top: 1rem;
 }
 
-.btn-view {
-  display: inline-block;
-  margin-top: 0.5rem;
-  padding: 0.6rem 1.2rem;
-  background-color: #896cb7;
-  color: #fff;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-family: 'Bilbo Swash Caps', cursive;
-  text-decoration: none;
-  transition: background 0.3s ease;
+
+.countdown-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 40px;
+  padding: 0.5rem 1rem;
+  gap: 0.5rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.btn-view:hover {
-  background-color: #6b52a4;
+.countdown-pill div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.85rem;
 }
+
+.countdown-pill strong {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #000;
+}
+
+.countdown-pill .dot {
+  font-size: 1.2rem;
+  color: #aaa;
+}
+
+
+.auction-card:hover .countdown-pill { 
+  transition: opacity 0.3s;
+}
+
+
+.ended-label {
+  color: #a00;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
 
 .no-auctions {
   text-align: center;
-  font-size: 1.6rem;
-  color: #888;
+  font-size: 1.2rem;
   margin-top: 2rem;
+  color: #555;
 }
-
-
-

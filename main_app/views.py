@@ -246,7 +246,16 @@ class AuctionListView(LoginRequiredMixin, TemplateView):
 
         return context
     
-    
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     now = timezone.now()
+
+    #     context['active_auctions'] = [
+    #         auction for auction in AuctionListing.objects.all()
+    #         if auction.end_time and auction.end_time > now
+    #     ]
+
+    #     return context
     
 
 class AuctionDetailView(LoginRequiredMixin, DetailView, FormView):
