@@ -1,10 +1,10 @@
-# 🐚 Pearl Auction 
+# Pearl Auction 
 
 A Django web application that allows users to post and showcase their **pearls**, upload **certifications**, and optionally list them for **auction every Thursday**. Users can **bid on pearls** during active auctions and manage their profiles.
 
 ---
 
-## 🚀 Features
+## Features
 
 - **User Authentication**
   - Signup, Login, Logout
@@ -32,7 +32,7 @@ A Django web application that allows users to post and showcase their **pearls**
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend:** Django
 - **Frontend:** HTML, CSS, JavaScript
@@ -44,7 +44,7 @@ A Django web application that allows users to post and showcase their **pearls**
 ---
 
 
-## ⏳ Auction Logic
+## Auction Logic
 
 - **Schedule:**
   - Auctions always start on **Thursdays at 00:00** and end at **23:59** the same day.
@@ -63,7 +63,7 @@ A Django web application that allows users to post and showcase their **pearls**
 
 ---
 
-## ✨ Highlights
+## Highlights
 
 - Clean separation of **CBVs (Class-Based Views)** for reusability
 - Secure bidding and object-level permissions
@@ -72,7 +72,7 @@ A Django web application that allows users to post and showcase their **pearls**
 
 ---
 
-## 🔒 Permissions & Validations
+## Permissions & Validations
 
 - Only owners can modify or delete their pearls and certifications
 - Pearls can only have one auction at a time
@@ -86,7 +86,7 @@ A Django web application that allows users to post and showcase their **pearls**
 
 ---
 
-## 🧪 Optional Enhancements
+## Optional Enhancements
 
 - Email notifications for auction winners
 - Admin dashboard for auction analytics
